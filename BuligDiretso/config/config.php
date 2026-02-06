@@ -28,6 +28,7 @@
     define('CONTROLLER_PATH', __DIR__ . '/../controllers/');
     define('MODEL_PATH', __DIR__ . '/../models/');
     define('ASSETS_PATH', BASE_URL . 'assets/');
-    define('CONFIG_PATH', BASE_URL . 'config/');
+    define('CONFIG_PATH', __DIR__ . '/');
+
 ?>
 
