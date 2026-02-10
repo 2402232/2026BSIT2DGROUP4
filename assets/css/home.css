@@ -1,6 +1,6 @@
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #F6F0F6;
+    background-color: #F5F5F5;
     color: #000;
 }
 
@@ -314,12 +314,6 @@ body {
     cursor:pointer;
 }
 
-@media (max-width: 975px) {
-    .hero-container {
-        margin-top: 113px;
-    }
-}
-
 @media (max-width: 900px) {
     .feature-grid {
         grid-template-columns: 1fr 1fr;
@@ -329,11 +323,5 @@ body {
 @media (max-width: 500px) {
     .feature-grid {
         grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 450px) {
-    .hero-container {
-        margin-top: 151px;
     }
 }

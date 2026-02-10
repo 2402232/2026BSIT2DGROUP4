@@ -5,7 +5,7 @@
 }
 
 body {
-    background: #f6f1f1;
+    background: #F5F5F5;
 }
 
 .main-container {
@@ -203,20 +203,8 @@ small.hint {
     text-decoration: none;
 }
 
-@media (max-width: 975px) {
-    .main-container {
-        margin-top: 113px;
-    }
-}
-
 @media (max-width: 900px) {
     .back-to-home {
         margin-left: 0;
-    }
-}
-
-@media (max-width: 450px) {
-    .main-container {
-        margin-top: 151px;
     }
 }

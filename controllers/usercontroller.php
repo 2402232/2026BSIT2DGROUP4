@@ -88,7 +88,7 @@
      */
     public function dashboard() {
         $this->requireLogin();
-        $pageTitle = "Dashboard - Silent Signal";
+        $pageTitle = "Dashboard - Bulig Diretso";
 
         // Shared header/footer data
         extract($this->getSharedData());
@@ -101,7 +101,7 @@
      */
     public function showReportSystem() {
         $this->requireLogin();
-        $pageTitle = "Report System - Silent Signal";
+        $pageTitle = "Report System - Bulig Diretso";
 
         // Shared header/footer data
         extract($this->getSharedData());
@@ -115,7 +115,7 @@
      */
     public function showEmergencyDashboard() {
         $this->requireLogin();
-        $pageTitle = "Emergency Dashboard - Silent Signal";
+        $pageTitle = "Emergency Dashboard - Bulig Diretso";
 
         // Shared header/footer data
         extract($this->getSharedData());
@@ -126,14 +126,14 @@
     /**
      * Tracking
      */
-    public function showTracking() {
+    public function showEmergencyTracking() {
         $this->requireLogin();
-        $pageTitle = "Tracking - Silent Signal";
+        $pageTitle = "Emergency Tracking - Bulig Diretso";
 
         // Shared header/footer data
         extract($this->getSharedData());
 
-        require_once VIEW_PATH . 'tracking.php';
+        require_once VIEW_PATH . 'emergency-tracking.php';
 
     }
     /**

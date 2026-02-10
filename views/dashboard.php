@@ -49,7 +49,7 @@
             </a>
 
             <!-- Emergency Dashboard -->
-            <a href="index.php" class="card">
+            <a href="index.php?action=emergency-dashboard" class="card">
                 <div class="card-circle purple">
                     <i class="ri-pulse-line"></i>
                 </div>

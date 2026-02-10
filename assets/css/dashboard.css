@@ -1,8 +1,9 @@
 
 /* Page Wrapper */
 .page-wrapper {
-    padding: 30px 150px;
-    margin-top: 84px;
+    max-width: 1200px;
+    padding: 30px;
+    margin: 84px auto 20px;
     font-family: 'Poppins', sans-serif;
 }
 
@@ -178,13 +179,6 @@
 
 /* Mobile Responsive */
 
-@media (max-width: 975px) {
-    .page-wrapper {
-        margin-top: 113px;
-        padding: 20px;
-    }
-}
-
 @media (max-width: 768px) {
     .page-wrapper {
         max-width: 100%;
@@ -221,14 +215,3 @@
     }
 }
 
-@media (max-width: 605px) {
-    .page-wrapper {
-        margin-top: 151px;
-    }
-}
-
-@media (max-width: 365px) {
-    .page-wrapper {
-        margin-top: 190px;
-    }
-}

@@ -53,7 +53,7 @@ switch ($action) {
 
     case 'tracking':
         require_once CONTROLLER_PATH . 'UserController.php';
-        (new UserController())->showTracking();
+        (new UserController())->showEmergencyTracking();
         break;
 
     case 'safety-guides':

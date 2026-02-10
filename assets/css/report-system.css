@@ -11,7 +11,7 @@ a {
 
 /* Page Wrapper */
 .page-wrapper {
-  padding: 30px 150px;
+  padding: 30px;
   margin-top: 84px;
   font-family: 'Poppins', sans-serif;
 }
@@ -388,22 +388,11 @@ a {
 /* ── RESPONSIVE ── */
 @media (max-width: 975px) {
   .page-wrapper {
-    margin-top: 144px;
     padding: 20px;
   }
 }
 
-@media (max-width: 605px) {
-  .page-wrapper {
-    margin-top: 182px;
-  }
-}
-
-
 @media (max-width: 410px) {
-  .page-wrapper {
-    margin-top: 221px;
-  }
   .priority-grid {
     gap: 8px;
   }
@@ -423,11 +412,5 @@ a {
 
   .card {
     padding: 16px 14px;
-  }
-}
-
-@media (max-width: 365px) {
-  .page-wrapper {
-    margin-top: 190px;
   }
 }
