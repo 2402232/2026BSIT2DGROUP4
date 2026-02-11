@@ -2,6 +2,6 @@
 
 <?php require_once VIEW_PATH . 'includes/header.php'; ?>
 
-
+<!-- sdasdjkabkfnkanf -->
 
 <?php require_once VIEW_PATH . 'includes/footer.php'; ?>
