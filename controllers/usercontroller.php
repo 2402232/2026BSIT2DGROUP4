@@ -147,6 +147,7 @@
         extract($this->getSharedData());
 
         require_once VIEW_PATH . 'safety-guides.php';
-
     }
+
+    // End of UserController class
 }
