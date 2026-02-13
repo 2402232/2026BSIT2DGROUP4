@@ -20,7 +20,7 @@ if ($isLocal) {
     define('BASE_URL', 'http://localhost/BuligDiretso/');
 } else {
     // PRODUCTION (HelioHost)
-    define('BASE_URL', 'https://izia.helioho.st/');
+    define('BASE_URL', 'https://buligdiretso.helioho.st/');
 }
 
 // ========================================
