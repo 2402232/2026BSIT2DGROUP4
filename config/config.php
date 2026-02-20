@@ -40,7 +40,7 @@ if ($isLocal) {
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'izia_db');
     define('DB_USER', 'izia_buligdiretso');
-    define('DB_PASS', 'REPLACE_THIS_PASSWORD');   // <-- setup.php replaces this line
+    define('DB_PASS', 'your_db_password');   
 }
 
 // ── DB connection singleton ──────────────────────────────────────────────────
