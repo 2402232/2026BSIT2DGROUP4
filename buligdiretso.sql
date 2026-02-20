@@ -1,12 +1,17 @@
 -- ============================================================
--- BuligDiretso — MySQL / MariaDB
--- Import while ALREADY INSIDE your database in phpMyAdmin.
+-- BuligDiretso — MySQL / MariaDB (HelioHost)
+-- Safe to re-import: uses INSERT IGNORE + truncates seed tables first
 -- ============================================================
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ============================================================
+-- TABLES (create only if not already there)
+-- ============================================================
 
 CREATE TABLE IF NOT EXISTS `users` (
   `id`            INT(11)      NOT NULL AUTO_INCREMENT,
@@ -103,10 +108,43 @@ CREATE TABLE IF NOT EXISTS `safety_guides` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
--- SEED DATA
--- admin@gmail.com  password: admin123
--- user@gmail.com   password: user123
--- All responder accounts password: user123
+-- Add profile_photo column to users if it doesn't exist yet
+-- ============================================================
+ALTER TABLE `users`
+  ADD COLUMN IF NOT EXISTS `profile_photo` VARCHAR(255) DEFAULT NULL;
+
+-- Add photo column to emergency_reports if it doesn't exist yet
+ALTER TABLE `emergency_reports`
+  ADD COLUMN IF NOT EXISTS `photo` VARCHAR(255) DEFAULT NULL;
+
+-- ============================================================
+-- CLEAR OLD SEED DATA (safe: only removes seeded rows by email)
+-- ============================================================
+DELETE FROM `report_assignments` WHERE report_id IN (
+  SELECT id FROM `emergency_reports` WHERE report_code IN ('ER-A373K','ER-B812M','ER-C559X','ER-D201R')
+);
+DELETE FROM `emergency_reports` WHERE report_code IN ('ER-A373K','ER-B812M','ER-C559X','ER-D201R');
+DELETE FROM `responders` WHERE user_id IN (
+  SELECT id FROM `users` WHERE email IN (
+    'admin@gmail.com','user@gmail.com',
+    'john.santoso@buligdiretso.ph','mario.reyes@buligdiretso.ph',
+    'david.cruz@buligdiretso.ph','sarah.lim@buligdiretso.ph',
+    'mike.tan@buligdiretso.ph','john.santos@buligdiretso.ph'
+  )
+);
+DELETE FROM `users` WHERE email IN (
+  'admin@gmail.com','user@gmail.com',
+  'john.santoso@buligdiretso.ph','mario.reyes@buligdiretso.ph',
+  'david.cruz@buligdiretso.ph','sarah.lim@buligdiretso.ph',
+  'mike.tan@buligdiretso.ph','john.santos@buligdiretso.ph'
+);
+DELETE FROM `safety_guides` WHERE created_by IS NULL OR created_by <= 8;
+
+-- ============================================================
+-- FRESH SEED DATA
+-- admin@gmail.com  → admin123
+-- user@gmail.com   → user123
+-- responders       → user123
 -- ============================================================
 
 INSERT INTO `users`
@@ -121,25 +159,62 @@ VALUES
 ('Mike', 'Tan',      'mike.tan@buligdiretso.ph',    '+63 917 100 0005','1987-09-14','Isabela City',            '$2y$10$ljAMm79CDEpi4ZjKzwrzeOhj3G.91qaqUBZCyOLpJ0988Z6tAd25e','responder'),
 ('John', 'Santos',   'john.santos@buligdiretso.ph', '+63 917 100 0006','1990-12-01','Isabela City',            '$2y$10$ljAMm79CDEpi4ZjKzwrzeOhj3G.91qaqUBZCyOLpJ0988Z6tAd25e','responder');
 
-INSERT INTO `responders` (`user_id`,`responder_type`,`status`) VALUES
-(3,'Medical','active'),(4,'Fire','responding'),(5,'Police','active'),
-(6,'LDRRMO','offline'),(7,'General','active'),(8,'Medical','active');
+INSERT INTO `responders` (`user_id`,`responder_type`,`status`)
+SELECT id,'Medical','active'   FROM users WHERE email='john.santoso@buligdiretso.ph'
+UNION ALL
+SELECT id,'Fire','responding'  FROM users WHERE email='mario.reyes@buligdiretso.ph'
+UNION ALL
+SELECT id,'Police','active'    FROM users WHERE email='david.cruz@buligdiretso.ph'
+UNION ALL
+SELECT id,'LDRRMO','offline'   FROM users WHERE email='sarah.lim@buligdiretso.ph'
+UNION ALL
+SELECT id,'General','active'   FROM users WHERE email='mike.tan@buligdiretso.ph'
+UNION ALL
+SELECT id,'Medical','active'   FROM users WHERE email='john.santos@buligdiretso.ph';
 
 INSERT INTO `emergency_reports`
     (`report_code`,`user_id`,`emergency_type`,`severity`,`status`,`description`,`location`)
-VALUES
-('ER-A373K',2,'Medical','critical','responding','Chest pain, difficulty breathing. Patient conscious but in severe pain.','Makati City'),
-('ER-B812M',2,'Fire',   'moderate','responding','Kitchen fire, smoke detected. Residents evacuating.',                   'Quezon City'),
-('ER-C559X',2,'Medical','critical','responding','Car accident, multiple injuries. Road blocked, require police assist.', 'Manila'),
-('ER-D201R',2,'Medical','minor',   'resolved',  'Patient stabilized after minor fall.',                                 'Pasig');
+SELECT 'ER-A373K',id,'Medical','critical','responding','Chest pain, difficulty breathing. Patient conscious but in severe pain.','Makati City'
+FROM users WHERE email='user@gmail.com'
+UNION ALL
+SELECT 'ER-B812M',id,'Fire','moderate','responding','Kitchen fire, smoke detected. Residents evacuating.','Quezon City'
+FROM users WHERE email='user@gmail.com'
+UNION ALL
+SELECT 'ER-C559X',id,'Medical','critical','responding','Car accident, multiple injuries. Road blocked, require police assist.','Manila'
+FROM users WHERE email='user@gmail.com'
+UNION ALL
+SELECT 'ER-D201R',id,'Medical','minor','resolved','Patient stabilized after minor fall.','Pasig'
+FROM users WHERE email='user@gmail.com';
 
-INSERT INTO `report_assignments` (`report_id`,`responder_id`,`assigned_by`) VALUES
-(1,1,1),(2,2,1),(3,3,1);
+INSERT INTO `report_assignments` (`report_id`,`responder_id`,`assigned_by`)
+SELECT er.id, r.id, u.id
+FROM emergency_reports er, responders r, users u
+WHERE er.report_code='ER-A373K'
+  AND r.user_id=(SELECT id FROM users WHERE email='john.santoso@buligdiretso.ph')
+  AND u.email='admin@gmail.com';
 
-INSERT INTO `safety_guides` (`title`,`category`,`content`,`created_by`) VALUES
-('Basic First Aid for Medical Emergencies','Medical',   'Apply pressure to wounds, keep the patient calm, call emergency services immediately.',1),
-('Fire Safety & Evacuation Procedures',   'Fire',      'Stay low under smoke, use stairways not elevators, meet at the assembly point outside.',1),
-('Flood Preparedness Guide',              'Flood',     'Prepare a go-bag, avoid flood waters, move to higher ground, monitor PAGASA updates.',1),
-('Earthquake Safety Tips',               'Earthquake','Drop, cover, and hold on. Move away from windows. Check for gas leaks after shaking stops.',1);
+INSERT INTO `report_assignments` (`report_id`,`responder_id`,`assigned_by`)
+SELECT er.id, r.id, u.id
+FROM emergency_reports er, responders r, users u
+WHERE er.report_code='ER-B812M'
+  AND r.user_id=(SELECT id FROM users WHERE email='mario.reyes@buligdiretso.ph')
+  AND u.email='admin@gmail.com';
 
+INSERT INTO `report_assignments` (`report_id`,`responder_id`,`assigned_by`)
+SELECT er.id, r.id, u.id
+FROM emergency_reports er, responders r, users u
+WHERE er.report_code='ER-C559X'
+  AND r.user_id=(SELECT id FROM users WHERE email='david.cruz@buligdiretso.ph')
+  AND u.email='admin@gmail.com';
+
+INSERT INTO `safety_guides` (`title`,`category`,`content`,`created_by`)
+SELECT 'Basic First Aid for Medical Emergencies','Medical','Apply pressure to wounds, keep the patient calm, call emergency services immediately.',id FROM users WHERE email='admin@gmail.com'
+UNION ALL
+SELECT 'Fire Safety & Evacuation Procedures','Fire','Stay low under smoke, use stairways not elevators, meet at the assembly point outside.',id FROM users WHERE email='admin@gmail.com'
+UNION ALL
+SELECT 'Flood Preparedness Guide','Flood','Prepare a go-bag, avoid flood waters, move to higher ground, monitor PAGASA updates.',id FROM users WHERE email='admin@gmail.com'
+UNION ALL
+SELECT 'Earthquake Safety Tips','Earthquake','Drop, cover, and hold on. Move away from windows. Check for gas leaks after shaking stops.',id FROM users WHERE email='admin@gmail.com';
+
+SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;
