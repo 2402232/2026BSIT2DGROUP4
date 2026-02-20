@@ -1,7 +1,6 @@
 -- ============================================================
--- BuligDiretso — MySQL / MariaDB (HelioHost compatible)
+-- BuligDiretso — MySQL / MariaDB
 -- Import while ALREADY INSIDE your database in phpMyAdmin.
--- Do NOT run CREATE DATABASE here (HelioHost doesn't allow it).
 -- ============================================================
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -9,9 +8,6 @@ SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
--- ------------------------------------------------------------
--- users  (profile_photo column added)
--- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `users` (
   `id`            INT(11)      NOT NULL AUTO_INCREMENT,
   `first_name`    VARCHAR(100) NOT NULL,
@@ -31,9 +27,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   KEY `idx_users_role` (`role`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ------------------------------------------------------------
--- responders
--- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `responders` (
   `id`             INT(11)  NOT NULL AUTO_INCREMENT,
   `user_id`        INT(11)  NOT NULL,
@@ -46,9 +39,6 @@ CREATE TABLE IF NOT EXISTS `responders` (
   CONSTRAINT `fk_resp_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ------------------------------------------------------------
--- emergency_reports  (photo column added)
--- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `emergency_reports` (
   `id`             INT(11)       NOT NULL AUTO_INCREMENT,
   `report_code`    VARCHAR(20)   NOT NULL,
@@ -70,9 +60,6 @@ CREATE TABLE IF NOT EXISTS `emergency_reports` (
   CONSTRAINT `fk_rpt_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ------------------------------------------------------------
--- report_assignments
--- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `report_assignments` (
   `id`           INT(11)  NOT NULL AUTO_INCREMENT,
   `report_id`    INT(11)  NOT NULL,
@@ -88,9 +75,6 @@ CREATE TABLE IF NOT EXISTS `report_assignments` (
   CONSTRAINT `fk_asgn_adm`  FOREIGN KEY (`assigned_by`)  REFERENCES `users`             (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ------------------------------------------------------------
--- emergency_tracking
--- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `emergency_tracking` (
   `id`            INT(11)       NOT NULL AUTO_INCREMENT,
   `report_id`     INT(11)       NOT NULL,
@@ -105,9 +89,6 @@ CREATE TABLE IF NOT EXISTS `emergency_tracking` (
   CONSTRAINT `fk_track_resp` FOREIGN KEY (`responder_id`) REFERENCES `responders`       (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ------------------------------------------------------------
--- safety_guides
--- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `safety_guides` (
   `id`           INT(11)      NOT NULL AUTO_INCREMENT,
   `title`        VARCHAR(255) NOT NULL,
@@ -123,21 +104,22 @@ CREATE TABLE IF NOT EXISTS `safety_guides` (
 
 -- ============================================================
 -- SEED DATA
--- All passwords = "password" (bcrypt hash below)
--- $2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi
+-- admin@gmail.com  password: admin123
+-- user@gmail.com   password: user123
+-- All responder accounts password: user123
 -- ============================================================
 
 INSERT INTO `users`
     (`first_name`,`last_name`,`email`,`phone`,`dob`,`address`,`password_hash`,`role`)
 VALUES
-('Admin', 'User',      'admin@gmail.com',              '+63 951 682 1504','1990-01-01','Isabela City, Basilan',    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','admin'),
-('Juan',  'Dela Cruz', 'user@gmail.com',               '+63 912 345 6789','1995-06-15','123 Main St, Isabela City','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','pwd'),
-('John',  'Santoso',   'john.santoso@buligdiretso.ph', '+63 917 100 0001','1988-03-10','Isabela City',             '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','responder'),
-('Mario', 'Reyes',     'mario.reyes@buligdiretso.ph',  '+63 917 100 0002','1985-07-22','Isabela City',             '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','responder'),
-('David', 'Cruz',      'david.cruz@buligdiretso.ph',   '+63 917 100 0003','1991-11-05','Isabela City',             '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','responder'),
-('Sarah', 'Lim',       'sarah.lim@buligdiretso.ph',    '+63 917 100 0004','1993-02-28','Isabela City',             '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','responder'),
-('Mike',  'Tan',       'mike.tan@buligdiretso.ph',     '+63 917 100 0005','1987-09-14','Isabela City',             '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','responder'),
-('John',  'Santos',    'john.santos@buligdiretso.ph',  '+63 917 100 0006','1990-12-01','Isabela City',             '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi','responder');
+('Admin','User',     'admin@gmail.com',             '+63 951 682 1504','1990-01-01','Isabela City, Basilan',    '$2y$10$zCioVZUrUSQj7AE4NH0oRepNvwnQpDWGLkGqL1iPVITyfbCaGpoZe','admin'),
+('Juan', 'Dela Cruz','user@gmail.com',              '+63 912 345 6789','1995-06-15','123 Main St, Isabela City','$2y$10$ljAMm79CDEpi4ZjKzwrzeOhj3G.91qaqUBZCyOLpJ0988Z6tAd25e','pwd'),
+('John', 'Santoso',  'john.santoso@buligdiretso.ph','+63 917 100 0001','1988-03-10','Isabela City',            '$2y$10$ljAMm79CDEpi4ZjKzwrzeOhj3G.91qaqUBZCyOLpJ0988Z6tAd25e','responder'),
+('Mario','Reyes',    'mario.reyes@buligdiretso.ph', '+63 917 100 0002','1985-07-22','Isabela City',            '$2y$10$ljAMm79CDEpi4ZjKzwrzeOhj3G.91qaqUBZCyOLpJ0988Z6tAd25e','responder'),
+('David','Cruz',     'david.cruz@buligdiretso.ph',  '+63 917 100 0003','1991-11-05','Isabela City',            '$2y$10$ljAMm79CDEpi4ZjKzwrzeOhj3G.91qaqUBZCyOLpJ0988Z6tAd25e','responder'),
+('Sarah','Lim',      'sarah.lim@buligdiretso.ph',   '+63 917 100 0004','1993-02-28','Isabela City',            '$2y$10$ljAMm79CDEpi4ZjKzwrzeOhj3G.91qaqUBZCyOLpJ0988Z6tAd25e','responder'),
+('Mike', 'Tan',      'mike.tan@buligdiretso.ph',    '+63 917 100 0005','1987-09-14','Isabela City',            '$2y$10$ljAMm79CDEpi4ZjKzwrzeOhj3G.91qaqUBZCyOLpJ0988Z6tAd25e','responder'),
+('John', 'Santos',   'john.santos@buligdiretso.ph', '+63 917 100 0006','1990-12-01','Isabela City',            '$2y$10$ljAMm79CDEpi4ZjKzwrzeOhj3G.91qaqUBZCyOLpJ0988Z6tAd25e','responder');
 
 INSERT INTO `responders` (`user_id`,`responder_type`,`status`) VALUES
 (3,'Medical','active'),(4,'Fire','responding'),(5,'Police','active'),

@@ -29,7 +29,7 @@ class AuthController extends HomeController
         $password =      $_POST['password'] ?? '';
 
         if ($email === '' || $password === '') {
-            $_SESSION['error'] = 'All fields are required.';
+            $_SESSION['error'] = 'Please enter your email and password.';
             header('Location: ' . BASE_URL . 'index.php?action=login');
             exit;
         }
@@ -53,12 +53,13 @@ class AuthController extends HomeController
                 exit;
             }
 
-            $_SESSION['error'] = 'Invalid email or password.';
+            $_SESSION['error'] = 'Invalid email or password. Please check your credentials and try again.';
             header('Location: ' . BASE_URL . 'index.php?action=login');
             exit;
 
         } catch (PDOException $e) {
-            $_SESSION['error'] = 'Database error — please try again.';
+            // Show the real DB error so you can diagnose it
+            $_SESSION['error'] = 'Database error: ' . $e->getMessage();
             header('Location: ' . BASE_URL . 'index.php?action=login');
             exit;
         }
@@ -97,7 +98,7 @@ class AuthController extends HomeController
         }
 
         if ($phone === '' || !preg_match('/^[0-9+\-\s()]{7,20}$/', $phone)) {
-            $errors[] = 'Please enter a valid phone number.';
+            $errors[] = 'Please enter a valid phone number (digits only, 7-20 characters).';
         }
 
         if (strlen($password) < 8) {
@@ -108,17 +109,20 @@ class AuthController extends HomeController
             $errors[] = 'Passwords do not match.';
         }
 
-        // Profile photo validation (optional)
+        // Profile photo — ONLY validate if a file was actually chosen
         $photoFilename = '';
-        if (!empty($_FILES['profile_photo']['name'])) {
+        $hasPhoto      = !empty($_FILES['profile_photo']['name']) && $_FILES['profile_photo']['error'] === UPLOAD_ERR_OK;
+
+        if ($hasPhoto) {
             $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-            if (!in_array($_FILES['profile_photo']['type'], $allowed)) {
+            $mime    = mime_content_type($_FILES['profile_photo']['tmp_name']);
+            if (!in_array($mime, $allowed)) {
                 $errors[] = 'Profile photo must be JPG, PNG, GIF, or WEBP.';
             } elseif ($_FILES['profile_photo']['size'] > 5 * 1024 * 1024) {
                 $errors[] = 'Profile photo must be under 5 MB.';
             } else {
-                $ext           = pathinfo($_FILES['profile_photo']['name'], PATHINFO_EXTENSION);
-                $photoFilename = uniqid('prof_', true) . '.' . strtolower($ext);
+                $ext           = strtolower(pathinfo($_FILES['profile_photo']['name'], PATHINFO_EXTENSION));
+                $photoFilename = uniqid('prof_', true) . '.' . $ext;
             }
         }
 
@@ -132,11 +136,11 @@ class AuthController extends HomeController
         try {
             $pdo = db();
 
-            // Duplicate e-mail check
+            // Check for duplicate email
             $chk = $pdo->prepare('SELECT id FROM users WHERE email = ? LIMIT 1');
             $chk->execute([$email]);
             if ($chk->fetch()) {
-                $_SESSION['signup_errors'] = ['An account with that email already exists.'];
+                $_SESSION['signup_errors'] = ['An account with that email already exists. Please login instead.'];
                 $_SESSION['signup_old']    = compact('fname', 'lname', 'email', 'phone', 'dob', 'address', 'role');
                 header('Location: ' . BASE_URL . 'index.php?action=signup');
                 exit;
@@ -151,10 +155,14 @@ class AuthController extends HomeController
             ');
             $ins->execute([$fname, $lname, $email, $phone, $dob, $address, $hash, $role, $photoFilename]);
 
-            // Move uploaded photo after successful DB insert
-            if ($photoFilename !== '') {
-                $dest = UPLOAD_PATH . 'profiles/' . $photoFilename;
-                move_uploaded_file($_FILES['profile_photo']['tmp_name'], $dest);
+            // Move photo ONLY if one was uploaded and DB insert succeeded
+            if ($hasPhoto && $photoFilename !== '') {
+                // Make sure upload dirs exist
+                $profileDir = UPLOAD_PATH . 'profiles';
+                if (!is_dir($profileDir)) {
+                    mkdir($profileDir, 0755, true);
+                }
+                move_uploaded_file($_FILES['profile_photo']['tmp_name'], $profileDir . '/' . $photoFilename);
             }
 
             $_SESSION['signup_success'] = true;
@@ -162,7 +170,8 @@ class AuthController extends HomeController
             exit;
 
         } catch (PDOException $e) {
-            $_SESSION['signup_errors'] = ['Registration failed — please try again.'];
+            // Show the real DB error so you can diagnose it
+            $_SESSION['signup_errors'] = ['Database error: ' . $e->getMessage()];
             $_SESSION['signup_old']    = compact('fname', 'lname', 'email', 'phone', 'dob', 'address', 'role');
             header('Location: ' . BASE_URL . 'index.php?action=signup');
             exit;

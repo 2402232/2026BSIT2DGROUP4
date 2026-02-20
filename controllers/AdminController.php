@@ -130,7 +130,9 @@ class AdminController
             ) {
                 $ext           = pathinfo($_FILES['profile_photo']['name'], PATHINFO_EXTENSION);
                 $photoFilename = uniqid('prof_', true) . '.' . strtolower($ext);
-                move_uploaded_file($_FILES['profile_photo']['tmp_name'], UPLOAD_PATH . 'profiles/' . $photoFilename);
+                $profileDir = UPLOAD_PATH . 'profiles';
+                if (!is_dir($profileDir)) mkdir($profileDir, 0755, true);
+                move_uploaded_file($_FILES['profile_photo']['tmp_name'], $profileDir . '/' . $photoFilename);
             }
         }
 
