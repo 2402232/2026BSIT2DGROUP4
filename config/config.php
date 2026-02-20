@@ -51,7 +51,7 @@ if ($isLocal) {
     // PRODUCTION — replace with your HelioHost cPanel MySQL credentials
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'izia_db');              // e.g. izia_db
-    define('DB_USER', 'izia_bulidiretso');     // e.g. izia_bulidiretso
+    define('DB_USER', 'izia_buligdiretso');     // e.g. izia_bulidiretso
     define('DB_PASS', 'your_db_password');     // set in cPanel MySQL
 }
 
