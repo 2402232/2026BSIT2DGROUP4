@@ -99,7 +99,7 @@
 
 </div>
 
-<?php include 'views/includes/footer.php'; ?>
+<?php require_once VIEW_PATH . 'includes/footer.php'; ?>
 
 
 

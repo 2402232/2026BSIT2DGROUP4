@@ -66,6 +66,6 @@
     </div>
 </div>
 
-<?php include 'views/includes/footer.php'; ?>
+<?php require_once VIEW_PATH . 'includes/footer.php'; ?>
 
 <script src="<?php echo ASSETS_PATH . 'js/safety-guides.js'; ?>"></script>

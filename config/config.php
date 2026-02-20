@@ -1,30 +1,23 @@
 <?php
 
-// Detect environment
+// ── Environment detection ───────────────────────────────────────────────────
 $isLocal = (
     $_SERVER['HTTP_HOST'] === 'localhost' ||
     strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false ||
-    strpos($_SERVER['HTTP_HOST'], 'localhost:') !== false
+    strpos($_SERVER['HTTP_HOST'], 'localhost:')  !== false
 );
 
-// ========================================
-// SITE SETTINGS
-// ========================================
+// ── Site ────────────────────────────────────────────────────────────────────
 define('SITE_NAME', 'BuligDiretso');
 
-// ========================================
-// BASE URL
-// ========================================
+// ── URLs ────────────────────────────────────────────────────────────────────
 if ($isLocal) {
     define('BASE_URL', 'http://localhost/BuligDiretso/');
 } else {
-    // PRODUCTION (HelioHost) — update this to your actual domain
     define('BASE_URL', 'https://buligdiretso.helioho.st/');
 }
 
-// ========================================
-// PATH CONSTANTS
-// ========================================
+// ── Paths ───────────────────────────────────────────────────────────────────
 define('ROOT_PATH',       dirname(__DIR__) . '/');
 define('VIEW_PATH',       ROOT_PATH . 'views/');
 define('CONTROLLER_PATH', ROOT_PATH . 'controllers/');
@@ -32,33 +25,25 @@ define('MODEL_PATH',      ROOT_PATH . 'models/');
 define('CONFIG_PATH',     ROOT_PATH . 'config/');
 define('UPLOAD_PATH',     ROOT_PATH . 'uploads/');
 define('UPLOADS_URL',     BASE_URL  . 'uploads/');
+define('ASSETS_PATH',     BASE_URL  . 'assets/');
 
-// ========================================
-// PUBLIC / ASSETS
-// ========================================
-define('ASSETS_PATH', BASE_URL . 'assets/');
-
-// ========================================
-// DATABASE — MySQL / MariaDB
-// ========================================
+// ── Database ─────────────────────────────────────────────────────────────────
+// LOCAL credentials
 if ($isLocal) {
-    // LOCAL (XAMPP/phpMyAdmin)
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'buligdiretso');
     define('DB_USER', 'root');
     define('DB_PASS', '');
 } else {
-    // PRODUCTION — replace with your HelioHost cPanel MySQL credentials
+    // !! PRODUCTION — filled in automatically by setup.php !!
+    // If you need to change these, visit: https://buligdiretso.helioho.st/setup.php
     define('DB_HOST', 'localhost');
-    define('DB_NAME', 'izia_db');              // e.g. izia_db
-    define('DB_USER', 'izia_buligdiretso');     // e.g. izia_buligdiretso
-    define('DB_PASS', 'your_db_password');     // set in cPanel MySQL
+    define('DB_NAME', 'izia_db');
+    define('DB_USER', 'izia_buligdiretso');
+    define('DB_PASS', 'REPLACE_THIS_PASSWORD');   // <-- setup.php replaces this line
 }
 
-/**
- * Returns a singleton PDO (MySQL) instance.
- * Usage: $pdo = db();
- */
+// ── DB connection singleton ──────────────────────────────────────────────────
 function db(): PDO
 {
     static $pdo = null;
