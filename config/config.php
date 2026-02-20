@@ -49,9 +49,9 @@ if ($isLocal) {
     // --- PRODUCTION (HelioHost cPanel) ---
     // Replace these values with the ones from your HelioHost cPanel → MySQL Databases
     define('DB_HOST', 'localhost');
-    define('DB_NAME', 'yourcpaneluser_buligdiretso'); // e.g. johnny_buligdiretso
-    define('DB_USER', 'yourcpaneluser_dbuser');       // e.g. johnny_dbuser
-    define('DB_PASS', 'your_db_password_here');
+    define('DB_NAME', 'izia_db');              // your actual DB name shown in phpMyAdmin
+    define('DB_USER', 'izia_bulidiretso');     // your actual DB user
+    define('DB_PASS', 'your_password_here');   // the password you set in cPanel
 }
 
 /**
