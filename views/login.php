@@ -40,8 +40,8 @@
 
                 <div class="demo-box">
                     <strong>Demo Accounts</strong><br>
-                    Admin &nbsp;: admin@gmail.com / <em>admin123</em><br>
-                    User &nbsp;&nbsp;: user@gmail.com &nbsp;/ <em>user123</em>
+                    Admin &nbsp;: admin@gmail.com / <em>password</em><br>
+                    User &nbsp;&nbsp;: user@gmail.com &nbsp;/ <em>password</em>
                 </div>
 
                 <div class="options">
