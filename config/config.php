@@ -18,7 +18,7 @@ define('SITE_NAME', 'BuligDiretso');
 if ($isLocal) {
     define('BASE_URL', 'http://localhost/BuligDiretso/');
 } else {
-    // PRODUCTION (HelioHost) — update this to your actual domain
+    // PRODUCTION (HelioHost)
     define('BASE_URL', 'https://buligdiretso.helioho.st/');
 }
 
@@ -30,8 +30,6 @@ define('VIEW_PATH',       ROOT_PATH . 'views/');
 define('CONTROLLER_PATH', ROOT_PATH . 'controllers/');
 define('MODEL_PATH',      ROOT_PATH . 'models/');
 define('CONFIG_PATH',     ROOT_PATH . 'config/');
-define('UPLOAD_PATH',     ROOT_PATH . 'uploads/');
-define('UPLOADS_URL',     BASE_URL  . 'uploads/');
 
 // ========================================
 // PUBLIC / ASSETS
@@ -42,33 +40,49 @@ define('ASSETS_PATH', BASE_URL . 'assets/');
 // DATABASE — MySQL / MariaDB
 // ========================================
 if ($isLocal) {
-    // LOCAL (XAMPP/phpMyAdmin)
+    // --- LOCAL (XAMPP / phpMyAdmin) ---
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'buligdiretso');
     define('DB_USER', 'root');
-    define('DB_PASS', '');
+    define('DB_PASS', '');          // XAMPP default has no password
 } else {
-    // PRODUCTION — replace with your HelioHost cPanel MySQL credentials
+    // --- PRODUCTION (HelioHost cPanel) ---
+    // Replace these values with the ones from your HelioHost cPanel → MySQL Databases
     define('DB_HOST', 'localhost');
-    define('DB_NAME', 'izia_db');              // e.g. izia_db
-    define('DB_USER', 'izia_buligdiretso');     // e.g. izia_bulidiretso
-    define('DB_PASS', 'your_db_password');     // set in cPanel MySQL
+    define('DB_NAME', 'yourcpaneluser_buligdiretso'); // e.g. johnny_buligdiretso
+    define('DB_USER', 'yourcpaneluser_dbuser');       // e.g. johnny_dbuser
+    define('DB_PASS', 'your_db_password_here');
 }
 
 /**
- * Returns a singleton PDO (MySQL) instance.
- * Usage: $pdo = db();
+ * Returns a shared PDO instance (MySQL).
+ * Usage anywhere in the project:
+ *
+ *   $pdo  = db();
+ *   $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+ *   $stmt->execute([$email]);
+ *   $user = $stmt->fetch();
  */
 function db(): PDO
 {
     static $pdo = null;
+
     if ($pdo === null) {
-        $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4';
-        $pdo = new PDO($dsn, DB_USER, DB_PASS, [
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES   => false,
-        ]);
+        $dsn = 'mysql:host=' . DB_HOST
+             . ';dbname='    . DB_NAME
+             . ';charset=utf8mb4';
+
+        try {
+            $pdo = new PDO($dsn, DB_USER, DB_PASS, [
+                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES   => false,
+            ]);
+        } catch (PDOException $e) {
+            // In production, log this instead of displaying raw errors
+            die('Database connection failed: ' . $e->getMessage());
+        }
     }
+
     return $pdo;
 }

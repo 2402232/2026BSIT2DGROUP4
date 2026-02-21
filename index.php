@@ -1,12 +1,13 @@
 <?php
 session_start();
+
+// Load config FIRST using real path
 require_once __DIR__ . '/config/config.php';
 
 $action = $_GET['action'] ?? 'home';
 
 switch ($action) {
 
-    /* ---------- PUBLIC ---------- */
     case 'home':
         require_once CONTROLLER_PATH . 'HomeController.php';
         (new HomeController())->index();
@@ -24,45 +25,33 @@ switch ($action) {
 
     case 'process_login':
         require_once CONTROLLER_PATH . 'AuthController.php';
-        (new AuthController())->processLogin();
+        $controller = new AuthController();
+        $controller->processLogin();
         break;
-
+        
     case 'process_signup':
         require_once CONTROLLER_PATH . 'AuthController.php';
-        (new AuthController())->processSignup();
+        $controller = new AuthController();
+        $controller->processSignup();
         break;
 
     case 'logout':
         require_once CONTROLLER_PATH . 'AuthController.php';
-        (new AuthController())->logout();
+        $controller = new AuthController();
+        $controller->logout();
         break;
 
-    /* ---------- USER ---------- */
+    // User module
     case 'dashboard':
         require_once CONTROLLER_PATH . 'UserController.php';
         (new UserController())->dashboard();
-        break;
-
-    case 'profile':
-        require_once CONTROLLER_PATH . 'UserController.php';
-        (new UserController())->showProfile();
-        break;
-
-    case 'update_profile':
-        require_once CONTROLLER_PATH . 'UserController.php';
-        (new UserController())->updateProfile();
         break;
 
     case 'report-system':
         require_once CONTROLLER_PATH . 'UserController.php';
         (new UserController())->showReportSystem();
         break;
-
-    case 'submit_report':
-        require_once CONTROLLER_PATH . 'UserController.php';
-        (new UserController())->submitReport();
-        break;
-
+        
     case 'emergency-dashboard':
         require_once CONTROLLER_PATH . 'UserController.php';
         (new UserController())->showEmergencyDashboard();
@@ -77,21 +66,11 @@ switch ($action) {
         require_once CONTROLLER_PATH . 'UserController.php';
         (new UserController())->showSafetyGuides();
         break;
-
-    /* ---------- ADMIN ---------- */
+     
+    // Admin module
     case 'admin-dashboard':
         require_once CONTROLLER_PATH . 'AdminController.php';
         (new AdminController())->adminDashboard();
-        break;
-
-    case 'admin-profile':
-        require_once CONTROLLER_PATH . 'AdminController.php';
-        (new AdminController())->showProfile();
-        break;
-
-    case 'admin-update-profile':
-        require_once CONTROLLER_PATH . 'AdminController.php';
-        (new AdminController())->updateProfile();
         break;
 
     case 'users':
@@ -104,8 +83,14 @@ switch ($action) {
         (new AdminController())->responders();
         break;
 
+    case 'responders':
+        require_once CONTROLLER_PATH . 'UserController.php';
+        (new UserController())->usersprofile();
+        break;
+
     default:
         require_once CONTROLLER_PATH . 'HomeController.php';
         (new HomeController())->index();
         break;
+    
 }
