@@ -41,10 +41,9 @@
 
         // Footer resources links
         $this->footerResources = [
-            ['label' => 'First Aid', 'href' => '#'],
-            ['label' => 'Documentation', 'href' => '#'],
-            ['label' => 'FAQ', 'href' => '#'],
-            ['label' => 'Support', 'href' => '#'],
+            ['label' => 'Safety Guides', 'href' => 'safety-guides'],
+            ['label' => 'FAQ', 'href' => 'faq'],
+            ['label' => 'Contact & Support', 'href' => 'contact'],
         ];
 
         // Footer social links
@@ -157,6 +156,37 @@
         extract($this->getSharedData());
 
         require_once VIEW_PATH . 'users-profile.php';
+    }
+
+
+    /**
+     * Guide Detail
+     */
+    public function showGuideDetail() {
+        $this->requireLogin();
+        $pageTitle = "Safety Guide - Bulig Diretso";
+        extract($this->getSharedData());
+        require_once VIEW_PATH . 'guide-detail.php';
+    }
+
+    /**
+     * FAQ
+     */
+    public function showFaq() {
+        $this->requireLogin();
+        $pageTitle = "FAQ - Bulig Diretso";
+        extract($this->getSharedData());
+        require_once VIEW_PATH . 'faq.php';
+    }
+
+    /**
+     * Contact & Support
+     */
+    public function showContact() {
+        $this->requireLogin();
+        $pageTitle = "Contact & Support - Bulig Diretso";
+        extract($this->getSharedData());
+        require_once VIEW_PATH . 'contact.php';
     }
 
     // End of UserController class
