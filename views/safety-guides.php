@@ -28,18 +28,24 @@
         <div class="guide-list" id="guideList">
             <?php
             $guides = [
-                ['title' => 'CPR Instructions',     'category' => 'Medical', 'read' => '5 min read'],
-                ['title' => 'Treating Burns',        'category' => 'Medical', 'read' => '3 min read'],
-                ['title' => 'Snake Bite Response',   'category' => 'Medical', 'read' => '4 min read'],
-                ['title' => 'Earthquake Safety',     'category' => 'Medical', 'read' => '6 min read'],
-                ['title' => 'Choking Relief',        'category' => 'Medical', 'read' => '2 min read'],
-                ['title' => 'Flood Evacuation',      'category' => 'Medical', 'read' => '5 min read'],
+                ['slug' => 'cpr-instructions',    'title' => 'CPR Instructions',   'category' => 'Medical',  'read' => '5 min read', 'icon' => 'ri-heart-pulse-line'],
+                ['slug' => 'treating-burns',      'title' => 'Treating Burns',      'category' => 'Medical',  'read' => '3 min read', 'icon' => 'ri-fire-line'],
+                ['slug' => 'snake-bite-response', 'title' => 'Snake Bite Response', 'category' => 'Medical',  'read' => '4 min read', 'icon' => 'ri-alert-line'],
+                ['slug' => 'earthquake-safety',   'title' => 'Earthquake Safety',   'category' => 'Disaster', 'read' => '6 min read', 'icon' => 'ri-earth-line'],
+                ['slug' => 'choking-relief',      'title' => 'Choking Relief',      'category' => 'Medical',  'read' => '2 min read', 'icon' => 'ri-lungs-line'],
+                ['slug' => 'flood-evacuation',    'title' => 'Flood Evacuation',    'category' => 'Disaster', 'read' => '5 min read', 'icon' => 'ri-flood-line'],
             ];
 
             foreach ($guides as $guide): ?>
-            <div class="guide-item" data-title="<?php echo strtolower($guide['title']); ?>">
+            <a class="guide-item" 
+               data-title="<?php echo strtolower($guide['title']); ?>"
+               href="index.php?action=guide-detail&guide=<?php echo $guide['slug']; ?>"
+               style="text-decoration:none; color:inherit; display:flex; align-items:center; justify-content:space-between;">
                 <div class="guide-item-left">
-                    <p class="guide-title"><?php echo $guide['title']; ?></p>
+                    <p class="guide-title">
+                        <i class="<?php echo $guide['icon']; ?>" style="color:#22C55E; margin-right:6px; font-size:15px;"></i>
+                        <?php echo $guide['title']; ?>
+                    </p>
                     <div class="guide-meta">
                         <span class="guide-category"><?php echo $guide['category']; ?></span>
                         <span class="guide-read">
@@ -49,11 +55,11 @@
                     </div>
                 </div>
                 <div class="guide-item-right">
-                    <button class="guide-btn" aria-label="Read <?php echo $guide['title']; ?>">
-                        <i class="ri-book-open-line"></i>
-                    </button>
+                    <div class="guide-btn" aria-label="Read <?php echo $guide['title']; ?>">
+                        <i class="ri-arrow-right-line"></i>
+                    </div>
                 </div>
-            </div>
+            </a>
             <?php endforeach; ?>
         </div>
 

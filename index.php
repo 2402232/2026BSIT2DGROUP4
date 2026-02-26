@@ -66,6 +66,21 @@ switch ($action) {
         require_once CONTROLLER_PATH . 'UserController.php';
         (new UserController())->showSafetyGuides();
         break;
+
+    case 'guide-detail':
+        require_once CONTROLLER_PATH . 'UserController.php';
+        (new UserController())->showGuideDetail();
+        break;
+
+    case 'faq':
+        require_once CONTROLLER_PATH . 'UserController.php';
+        (new UserController())->showFaq();
+        break;
+
+    case 'contact':
+        require_once CONTROLLER_PATH . 'UserController.php';
+        (new UserController())->showContact();
+        break;
      
     // Admin module
     case 'admin-dashboard':
@@ -81,6 +96,11 @@ switch ($action) {
     case 'responders':
         require_once CONTROLLER_PATH . 'AdminController.php';
         (new AdminController())->responders();
+        break;
+
+    case 'responders':
+        require_once CONTROLLER_PATH . 'UserController.php';
+        (new UserController())->usersprofile();
         break;
 
     default:

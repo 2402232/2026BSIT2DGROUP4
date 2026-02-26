@@ -24,6 +24,18 @@
                 <a class="tab" href="index.php?action=signup">Sign Up</a>
             </div>
 
+            <!-- FLASH MESSAGES -->
+            <?php if (!empty($_SESSION['success'])): ?>
+                <div class="alert alert-success">
+                    <?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
+                </div>
+            <?php endif; ?>
+            <?php if (!empty($_SESSION['error'])): ?>
+                <div class="alert alert-error">
+                    <?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
+                </div>
+            <?php endif; ?>
+
             <!-- FORM -->
             <form action="<?php echo BASE_URL; ?>index.php?action=process_login" method="POST">
                 <label>Email Address<span>*</span></label>

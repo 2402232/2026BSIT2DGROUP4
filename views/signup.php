@@ -23,52 +23,68 @@
                 <a class="tab active">Sign Up</a>
             </div>
     
+            <!-- FLASH MESSAGES -->
+            <?php
+                $old    = $_SESSION['signup_old']    ?? [];
+                $errors = $_SESSION['signup_errors'] ?? [];
+                unset($_SESSION['signup_old'], $_SESSION['signup_errors']);
+            ?>
+            <?php if (!empty($errors)): ?>
+                <div class="alert alert-error">
+                    <ul style="margin:0;padding-left:18px;">
+                        <?php foreach ($errors as $e): ?>
+                            <li><?php echo htmlspecialchars($e); ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+
             <!-- FORM -->
             <form action="<?php echo BASE_URL; ?>index.php?action=process_signup" method="POST">
     
                 <label>First Name<span>*</span></label>
                 <div class="input-group">
                     <span class="icon">👤</span>
-                    <input type="text" name="first_name" required>
+                    <input type="text" name="first_name" value="<?php echo htmlspecialchars($old['first_name'] ?? ''); ?>" required>
                 </div>
     
                 <label>Last Name<span>*</span></label>
                 <div class="input-group">
                     <span class="icon">👤</span>
-                    <input type="text" name="last_name" required>
+                    <input type="text" name="last_name" value="<?php echo htmlspecialchars($old['last_name'] ?? ''); ?>" required>
                 </div>
     
                 <label>Phone Number<span>*</span></label>
                 <div class="input-group">
                     <span class="icon">📞</span>
-                    <input type="tel" name="phone" required>
+                    <input type="tel" name="phone" value="<?php echo htmlspecialchars($old['phone'] ?? ''); ?>" required>
                 </div>
                 <small class="hint">Used for emergency notification</small>
     
                 <label>Date of Birth<span>*</span></label>
                 <div class="input-group">
                     <span class="icon">📅</span>
-                    <input type="date" name="dob" required>
+                    <input type="date" name="dob" value="<?php echo htmlspecialchars($old['dob'] ?? ''); ?>" required>
                 </div>
     
                 <label>Address<span>*</span></label>
                 <div class="input-group">
                     <span class="icon">🏠</span>
-                    <input type="text" name="address" required>
+                    <input type="text" name="address" value="<?php echo htmlspecialchars($old['address'] ?? ''); ?>" required>
                 </div>
     
                 <label>Email Address<span>*</span></label>
                 <div class="input-group">
                     <span class="icon">✉️</span>
-                    <input type="email" name="email" required>
+                    <input type="email" name="email" value="<?php echo htmlspecialchars($old['email'] ?? ''); ?>" required>
                 </div>
     
                 
                 <label for="role">Role</label>
                 <select id="role" name="role" class="input-group" required>
-                    <option value="" disabled selected>Select Role</option>
-                    <option value="pwd">User</option>
-                    <option value="admin">Administrator</option>
+                    <option value="" disabled <?php echo empty($old['role']) ? 'selected' : ''; ?>>Select Role</option>
+                    <option value="pwd"   <?php echo (($old['role'] ?? '') === 'pwd')   ? 'selected' : ''; ?>>User</option>
+                    <option value="admin" <?php echo (($old['role'] ?? '') === 'admin') ? 'selected' : ''; ?>>Administrator</option>
                 </select>
                 
     
