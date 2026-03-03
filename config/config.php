@@ -48,10 +48,10 @@ if ($isLocal) {
 } else {
     // --- PRODUCTION (HelioHost cPanel) ---
     // Replace these values with the ones from your HelioHost cPanel → MySQL Databases
-    define('DB_HOST', 'localhost');
-    define('DB_NAME', 'yourcpaneluser_buligdiretso'); // e.g. johnny_buligdiretso
-    define('DB_USER', 'yourcpaneluser_dbuser');       // e.g. johnny_dbuser
-    define('DB_PASS', 'your_db_password_here');
+    define('DB_HOST', 'morty.heliohost.org'); // e.g. morty.heliohost.org
+    define('DB_NAME', 'izia_db'); // e.g. johnny_buligdiretso
+    define('DB_USER', 'izia_buligdiretso');       // e.g. johnny_dbuser
+    define('DB_PASS', 'Buligdiretso');
 }
 
 /**
