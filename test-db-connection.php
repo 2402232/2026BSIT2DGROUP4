@@ -2,7 +2,7 @@
 // test-db-connection.php - Test database connection
 
 require_once 'config/config.php';
-require_once 'config/Database.php';
+require_once 'config/database.php';
 
 echo "<h2>Database Connection Test</h2>";
 
