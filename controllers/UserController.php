@@ -1,5 +1,7 @@
-<?php 
-    class UserController {
+<?php
+require_once MODEL_PATH . 'user.php';
+
+class UserController {
 
     // Shared data for header and footer
     protected $navItems;
@@ -150,11 +152,18 @@
 
     public function showUsersprofile() {
         $this->requireLogin();
-        $pageTitle = "Users-profile - Bulig Diretso";
+        $pageTitle = "My Profile - BuligDiretso";
 
-        // Shared header/footer data
+        $user = User::findById((int) $_SESSION['user_id']);
+        if (!$user) {
+            $_SESSION['error'] = "User not found.";
+            header("Location: " . BASE_URL . "index.php?action=dashboard");
+            exit();
+        }
+        $user['joined_date'] = $user['created_at'] ?? $user['updated_at'];
+        $user['profile_picture'] = !empty($user['profile_photo']) ? (BASE_URL . $user['profile_photo']) : (ASSETS_PATH . 'images/default-avatar.png');
+
         extract($this->getSharedData());
-
         require_once VIEW_PATH . 'users-profile.php';
     }
 

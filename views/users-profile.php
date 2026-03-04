@@ -1,17 +1,11 @@
 <?php
-// Mock user data - replace with database fetch
-$user = [
-    'id' => 1,
-    'first_name' => 'Juan',
-    'last_name' => 'Dela Cruz',
-    'email' => 'juan.delacruz@example.com',
-    'phone' => '09123456789',
-    'address' => 'Barangay Bulad, Isabela, Negros Occidental',
-    'date_of_birth' => '1990-05-15',
-    'role' => 'Resident',
-    'joined_date' => '2024-01-15',
-    'profile_picture' => ASSETS_PATH . 'images/default-avatar.png' // or actual uploaded photo
-];
+// $user is set by UserController from database (User::findById)
+if (empty($user)) {
+    header('Location: ' . BASE_URL . 'index.php?action=dashboard');
+    exit();
+}
+$joined_date = $user['joined_date'] ?? $user['created_at'] ?? null;
+$profile_picture = $user['profile_picture'] ?? (ASSETS_PATH . 'images/default-avatar.png');
 ?>
 
 <?php require_once VIEW_PATH . 'includes/header.php'; ?>
@@ -31,7 +25,7 @@ $user = [
             <!-- Header Section -->
             <div class="profile-header">
                 <div class="profile-avatar">
-                    <img src="<?php echo $user['profile_picture']; ?>" alt="Profile Picture" id="profileImg">
+                    <img src="<?php echo htmlspecialchars($profile_picture); ?>" alt="Profile Picture" id="profileImg">
                     <button class="avatar-upload-btn" id="uploadBtn" title="Change photo">
                         <i class="ri-camera-line"></i>
                     </button>
@@ -70,7 +64,7 @@ $user = [
 
                         <div class="info-item">
                             <label><i class="ri-cake-line"></i> Date of Birth</label>
-                            <p><?php echo date('F j, Y', strtotime($user['date_of_birth'])); ?></p>
+                            <p><?php echo !empty($user['date_of_birth']) ? date('F j, Y', strtotime($user['date_of_birth'])) : '—'; ?></p>
                         </div>
 
                         <div class="info-item">
@@ -92,7 +86,7 @@ $user = [
 
                         <div class="info-item">
                             <label><i class="ri-calendar-line"></i> Member Since</label>
-                            <p><?php echo date('F j, Y', strtotime($user['joined_date'])); ?></p>
+                            <p><?php echo $joined_date ? date('F j, Y', strtotime($joined_date)) : '—'; ?></p>
                         </div>
 
                     </div>

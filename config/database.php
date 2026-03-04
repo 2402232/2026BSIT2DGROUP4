@@ -1,5 +1,11 @@
 <?php
-// config/Database.php
+// config/database.php
+// Requires config.php to be loaded first (defines DB_* constants).
+// Use db() from config.php in application code; this class is for test-db-connection.php
+
+if (!defined('DB_HOST')) {
+    require_once dirname(__DIR__) . '/config/config.php';
+}
 
 class Database {
     private $host;
@@ -18,29 +24,28 @@ class Database {
     public function getConnection() {
         $this->conn = null;
 
+        $charset = defined('DB_CHARSET') ? DB_CHARSET : 'utf8mb4';
+        $dsn = "mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=" . $charset;
+
         try {
             $this->conn = new PDO(
-                "mysql:host=" . $this->host . ";dbname=" . $this->db_name,
+                $dsn,
                 $this->username,
                 $this->password,
-                array(
+                [
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
-                )
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                ]
             );
         } catch(PDOException $e) {
-            // Log error (don't show to users in production)
             error_log("Connection Error: " . $e->getMessage());
-            
-            // Show user-friendly error
             die("Database connection failed. Please try again later.");
         }
 
         return $this->conn;
     }
 
-    // Test connection
     public function testConnection() {
         try {
             $conn = $this->getConnection();
@@ -50,4 +55,3 @@ class Database {
         }
     }
 }
-?>

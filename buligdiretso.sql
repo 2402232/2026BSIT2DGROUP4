@@ -4,6 +4,11 @@
 --  Compatible: MySQL 5.7+ / MariaDB 10.3+
 -- ============================================================
 
+-- Create database and select it (so one import sets everything up)
+CREATE DATABASE IF NOT EXISTS buligdiretso
+  DEFAULT CHARACTER SET utf8mb4
+  DEFAULT COLLATE utf8mb4_unicode_ci;
+USE buligdiretso;
 
 -- ============================================================
 -- 1. USERS

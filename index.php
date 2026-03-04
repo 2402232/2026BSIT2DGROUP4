@@ -1,7 +1,5 @@
 <?php
-session_start();
-
-// Load config FIRST using real path
+// Load config FIRST so session is started with secure settings
 require_once __DIR__ . '/config/config.php';
 
 $action = $_GET['action'] ?? 'home';
@@ -98,9 +96,9 @@ switch ($action) {
         (new AdminController())->responders();
         break;
 
-    case 'responders':
+    case 'users-profile':
         require_once CONTROLLER_PATH . 'UserController.php';
-        (new UserController())->usersprofile();
+        (new UserController())->showUsersprofile();
         break;
 
     default:
