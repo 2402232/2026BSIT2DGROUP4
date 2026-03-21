@@ -1,0 +1,628 @@
+/* profile.css */
+
+/* ── WRAPPER ── */
+.profile-wrapper {
+    padding-top: 84px;
+    min-height: 100vh;
+    background: #EEF2F6;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 60px;
+    box-sizing: border-box;
+}
+
+/* ── BACK LINK ── */
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.82rem;
+    color: #667085;
+    text-decoration: none;
+    margin-top: 18px;
+    margin-bottom: 18px;
+    display: block;
+    transition: color 0.15s;
+}
+
+.back-link:hover {
+    color: #12375A;
+}
+
+/* ── CONTAINER ── */
+.profile-container {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+/* ── PROFILE CARD ── */
+.profile-card {
+    background: #FFFFFF;
+    border-radius: 14px;
+    border: 1px solid #E4E7EC;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+/* ── HEADER SECTION ── */
+.profile-header {
+    background: linear-gradient(135deg, #12375A 0%, #1E5A8E 100%);
+    padding: 40px 28px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+}
+
+/* Avatar */
+.profile-avatar {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    margin-bottom: 16px;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #FFFFFF;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.avatar-upload-btn {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #E53935;
+    border: 2px solid #FFFFFF;
+    color: #FFFFFF;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.18s, transform 0.12s;
+}
+
+.avatar-upload-btn:hover {
+    background: #B71C1C;
+    transform: scale(1.08);
+}
+
+/* Name & Role */
+.profile-name {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
+}
+
+.profile-role {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+}
+
+/* ── BODY SECTION ── */
+.profile-body {
+    padding: 28px;
+}
+
+/* ── INFO SECTION ── */
+.info-section {
+    margin-bottom: 28px;
+}
+
+.section-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1C2333;
+    margin: 0 0 16px;
+    letter-spacing: -0.01em;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #F2F4F7;
+}
+
+/* Info Grid */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.info-item label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #98A2B3;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.info-item label i {
+    font-size: 14px;
+    color: #B0B8C8;
+}
+
+.info-item p {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: #1C2333;
+    margin: 0;
+}
+
+/* Role Badge */
+.role-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #12375A;
+    background: #E0F2FE;
+    border: 1px solid #BAE6FD;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+/* ── ACTION BUTTONS ── */
+.profile-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #F2F4F7;
+}
+
+.btn-edit,
+.btn-password {
+    flex: 1;
+    padding: 11px 16px;
+    border-radius: 9px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: inherit;
+    border: none;
+}
+
+.btn-edit {
+    background: #12375A;
+    color: #FFFFFF;
+}
+
+.btn-edit:hover {
+    background: #0E2A47;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(18, 55, 90, 0.25);
+}
+
+.btn-password {
+    background: #F2F4F7;
+    color: #667085;
+    border: 1px solid #E4E7EC;
+}
+
+.btn-password:hover {
+    background: #E4E7EC;
+    color: #1C2333;
+    transform: translateY(-1px);
+}
+
+.section-head-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.section-head-row .section-title {
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.contact-count {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #12375A;
+    background: #EAF3FF;
+    border: 1px solid #CFE4FF;
+    border-radius: 999px;
+    padding: 4px 10px;
+    white-space: nowrap;
+}
+
+.contact-alert {
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+}
+
+.contact-success {
+    background: #e8f8ee;
+    color: #1f7a3f;
+    border: 1px solid #bce5ca;
+}
+
+.contact-error {
+    background: #fdecec;
+    color: #9b1c1c;
+    border: 1px solid #f5c2c2;
+}
+
+/* Emergency contacts — layout + custom text fields */
+.emergency-contacts-section {
+    margin-top: 4px;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 28px;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.contact-form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 22px 20px 20px;
+    border: 1px solid #E4E7EC;
+    border-radius: 16px;
+    background: linear-gradient(160deg, #FFFFFF 0%, #F9FBFD 45%, #F2F6FA 100%);
+    box-shadow:
+        0 6px 28px rgba(18, 55, 90, 0.07),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.contact-form-actions {
+    margin-top: 16px;
+    padding-top: 4px;
+}
+
+.contact-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contact-field-relationship {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contact-field label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #344054;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.contact-field label .label-icon {
+    font-size: 15px;
+    color: #12375A;
+    opacity: 0.85;
+}
+
+/* Rounded “pill” textbox shell — matches profile navy accent */
+.contact-field-line {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    min-height: 56px;
+    padding: 4px 6px 4px 6px;
+    border-radius: 16px;
+    border: 1.5px solid #D0D5DD;
+    background: #FFFFFF;
+    box-shadow: 0 2px 10px rgba(18, 55, 90, 0.05);
+    transition:
+        border-color 0.22s ease,
+        box-shadow 0.22s ease,
+        background 0.22s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-field-line::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 16px 0 0 16px;
+    background: linear-gradient(180deg, #1E5A8E 0%, #12375A 100%);
+    opacity: 0;
+    transition: opacity 0.22s ease;
+}
+
+.contact-field-line:hover {
+    border-color: #98A2B3;
+    box-shadow: 0 4px 16px rgba(18, 55, 90, 0.08);
+}
+
+.contact-field-line:focus-within {
+    border-color: #12375A;
+    background: linear-gradient(180deg, #FFFFFF 0%, #FAFCFE 100%);
+    box-shadow:
+        0 0 0 4px rgba(18, 55, 90, 0.11),
+        0 8px 24px rgba(18, 55, 90, 0.1);
+}
+
+.contact-field-line:focus-within::before {
+    opacity: 1;
+}
+
+.contact-input-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 48px;
+    min-height: 48px;
+    margin: 2px 0 2px 2px;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #E8F1FA 0%, #DDEAF6 100%);
+    border: 1px solid #C5D9ED;
+    color: #12375A;
+}
+
+.contact-input-icon i {
+    font-size: 22px;
+    line-height: 1;
+}
+
+.contact-field-line:focus-within .contact-input-icon {
+    background: linear-gradient(145deg, #12375A 0%, #1E5A8E 100%);
+    border-color: #0E2A47;
+    color: #FFFFFF;
+}
+
+.contact-form input,
+.contact-field-line select {
+    flex: 1;
+    min-width: 0;
+    min-height: 48px;
+    border: none;
+    outline: none;
+    padding: 12px 16px 12px 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: #1C2333;
+    background: transparent;
+}
+
+.contact-field-line select {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: transparent;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 12 12'%3E%3Cpath fill='%2312375A' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+}
+
+.contact-field-select {
+    padding-right: 0;
+}
+
+.contact-relationship-other {
+    margin-top: 2px;
+}
+
+.contact-form input::placeholder {
+    color: #98A2B3;
+    font-size: 0.95rem;
+}
+
+.btn-add-contact {
+    width: 100%;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #12375A 0%, #1E5A8E 100%);
+    color: #FFFFFF;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 15px 20px;
+    min-height: 52px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 6px 20px rgba(18, 55, 90, 0.22);
+}
+
+.btn-add-contact:hover {
+    background: linear-gradient(135deg, #0E2A47 0%, #12375A 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(18, 55, 90, 0.28);
+}
+
+.btn-add-contact:active {
+    transform: translateY(0);
+}
+
+.contact-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.contact-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #E4E7EC;
+    border-radius: 14px;
+    padding: 14px 14px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #FAFBFD 100%);
+    gap: 12px;
+    box-shadow: 0 2px 10px rgba(18, 55, 90, 0.04);
+}
+
+.contact-name {
+    margin: 0;
+    font-weight: 600;
+    color: #1C2333;
+    font-size: 0.9rem;
+}
+
+.contact-meta {
+    margin: 4px 0 0;
+    font-size: 0.81rem;
+    color: #667085;
+}
+
+.contact-meta span {
+    color: #98A2B3;
+    font-weight: 600;
+    margin-right: 4px;
+}
+
+.contact-remove-form {
+    margin-left: auto;
+}
+
+.btn-remove-contact {
+    border: 1px solid #E4E7EC;
+    background: #F8FAFC;
+    color: #667085;
+    border-radius: 8px;
+    padding: 8px 11px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.18s;
+}
+
+.btn-remove-contact:hover {
+    background: #F2F4F7;
+    color: #1C2333;
+    border-color: #D0D5DD;
+    transform: translateY(-1px);
+}
+
+.contact-empty,
+.contact-limit-msg {
+    margin: 2px 0 0;
+    font-size: 0.84rem;
+    color: #667085;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+    .profile-wrapper {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .profile-header {
+        padding: 32px 18px 26px;
+    }
+
+    .profile-body {
+        padding: 20px 16px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .profile-actions {
+        flex-direction: column;
+    }
+
+    .section-head-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .contact-form-grid {
+        padding: 18px 14px 16px;
+        border-radius: 14px;
+    }
+
+    .contact-field-line {
+        min-height: 52px;
+        border-radius: 14px;
+    }
+
+    .contact-input-icon {
+        width: 44px;
+        min-height: 44px;
+        border-radius: 10px;
+    }
+
+    .contact-input-icon i {
+        font-size: 20px;
+    }
+
+    .contact-form input,
+    .contact-field-line select {
+        font-size: 16px; /* avoids iOS zoom on focus */
+        min-height: 46px;
+        padding: 10px 12px 10px 8px;
+    }
+
+    .btn-add-contact {
+        padding: 14px 16px;
+    }
+
+    .contact-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .contact-list {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-remove-form {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .btn-remove-contact {
+        width: 100%;
+        justify-content: center;
+    }
+}

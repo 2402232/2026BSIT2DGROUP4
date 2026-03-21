@@ -1,0 +1,208 @@
+/* contact.css */
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.hotlines-card,
+.contact-form-card {
+    height: fit-content;
+}
+
+.hotlines-desc {
+    font-size: 0.84rem;
+    color: #667085;
+    margin: -12px 0 20px;
+    line-height: 1.6;
+}
+
+/* ── HOTLINES ── */
+.hotline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.hotline-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: #F9FAFB;
+    border: 1px solid #F2F4F7;
+    border-radius: 10px;
+    transition: background 0.15s;
+}
+
+.hotline-item:hover {
+    background: #F2F4F7;
+}
+
+.hotline-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.hotline-info {
+    flex: 1;
+}
+
+.hotline-name {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #1C2333;
+    margin: 0 0 2px;
+}
+
+.hotline-desc {
+    font-size: 0.75rem;
+    color: #98A2B3;
+    margin: 0;
+}
+
+.hotline-call {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #DCFCE7;
+    color: #16A34A;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s;
+}
+
+.hotline-call:hover {
+    background: #BBF7D0;
+}
+
+/* ── FORM ── */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 14px;
+}
+
+.form-group label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #344054;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #E4E7EC;
+    border-radius: 9px;
+    font-size: 0.85rem;
+    color: #1C2333;
+    background: #FAFAFA;
+    font-family: inherit;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.form-input::placeholder { color: #B0B8C8; }
+
+.form-input:focus {
+    outline: none;
+    border-color: #22C55E;
+    box-shadow: 0 0 0 3px rgba(34,197,94,0.10);
+    background: #fff;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: #22C55E;
+    color: #fff;
+    border: none;
+    border-radius: 9px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    font-family: inherit;
+    transition: background 0.18s;
+}
+
+.submit-btn:hover { background: #16A34A; }
+.submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+.form-success {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: #F0FDF4;
+    border: 1px solid #BBF7D0;
+    border-radius: 9px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #16A34A;
+}
+
+/* ── QUICK LINKS ── */
+.quick-links-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.quick-link-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 10px;
+    background: #F9FAFB;
+    border: 1px solid #E4E7EC;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #1C2333;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.quick-link-item i {
+    font-size: 22px;
+    color: #22C55E;
+}
+
+.quick-link-item:hover {
+    background: #F0FDF4;
+    border-color: #BBF7D0;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hotline-call {
+        font-size: 0.72rem;
+        padding: 5px 9px;
+    }
+}
