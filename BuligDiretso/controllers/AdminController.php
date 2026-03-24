@@ -26,6 +26,7 @@ class AdminController  {
             ['action' => 'admin-dashboard','label' => 'Home'],
             ['action' => 'users', 'label' => 'Users Needing Help'],
             ['action' => 'responders', 'label' => 'Responders'],
+            ['action' => 'admin-sms', 'label' => '📲 SMS Center'],
         ];
 
         // Footer quick links
@@ -95,10 +96,13 @@ class AdminController  {
     }
     public function responders() {
         $pageTitle = "Responders - BuligDiretso";
-
-        // Shared header/footer data
         extract($this->getSharedData());
-
         require_once VIEW_PATH . 'admin-responders.php';
+    }
+
+    public function smsCenter() {
+        $pageTitle = "SMS Center - BuligDiretso";
+        extract($this->getSharedData());
+        require_once VIEW_PATH . 'admin-sms.php';
     }
 }

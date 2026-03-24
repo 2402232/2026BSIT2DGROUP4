@@ -67,6 +67,12 @@ define('CSRF_TOKEN_EXPIRE', 1800);    // 30 minutes in seconds
 define('ADMIN_EMAIL', 'admin@buligdiretso.com');
 
 // ============================================================
+// PHILSMS API SETTINGS
+// ============================================================
+define('PHILSMS_TOKEN',  '1918|sYhaDMqM5GWDCskXftcnZZjfoZrHm7Vnk90RzOJ60083a4e8');
+define('PHILSMS_SENDER', 'PhilSMS');
+
+// ============================================================
 // SESSION INITIALIZATION
 // ============================================================
 if (session_status() === PHP_SESSION_NONE) {
@@ -176,3 +182,8 @@ function verify_password($password, $hash)
 {
     return password_verify($password, $hash);
 }
+
+// ============================================================
+// LOAD SMS SERVICE
+// ============================================================
+require_once ROOT_PATH . 'services/SmsService.php';

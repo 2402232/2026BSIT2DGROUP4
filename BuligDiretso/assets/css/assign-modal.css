@@ -1,0 +1,214 @@
+/* assign-modal.css — Assign Responder Modal for BuligDiretso */
+
+/* Flash alerts */
+.sms-flash {
+    padding: 13px 18px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    font-size: 14px;
+    font-weight: 500;
+}
+.sms-flash.success { background:#eafaf1; color:#1e8449; border:1px solid #a9dfbf; }
+.sms-flash.error   { background:#fdf2f2; color:#c0392b; border:1px solid #f5b7b1; }
+
+/* Overlay */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Box */
+.modal-box {
+    background: #fff;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 580px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    animation: modalIn .18s ease;
+}
+@keyframes modalIn {
+    from { transform: translateY(30px); opacity:0; }
+    to   { transform: translateY(0);    opacity:1; }
+}
+
+/* Header */
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #eee;
+}
+.modal-header h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #888;
+    cursor: pointer;
+    line-height: 1;
+}
+.modal-close:hover { color: #e74c3c; }
+
+/* Summary */
+.modal-summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px 0;
+}
+.em-tag {
+    background: #e74c3c;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+}
+.modal-summary span:last-child {
+    font-size: 13px;
+    color: #666;
+    font-weight: 500;
+}
+.modal-user-info {
+    padding: 6px 24px 0;
+    font-size: 13px;
+    color: #555;
+}
+
+/* Sections */
+.modal-section {
+    padding: 18px 24px 0;
+}
+.modal-section h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.modal-section h4 i { font-size: 15px; color: #e74c3c; }
+
+/* Form rows */
+.form-row {
+    display: flex;
+    gap: 14px;
+}
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #333;
+    background: #fafafa;
+    transition: border-color .2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    background: #fff;
+}
+
+/* SMS Preview box */
+.sms-preview {
+    background: #f0f9ff;
+    border: 1px solid #bee3f8;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 13px;
+    color: #2c3e50;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Follow-up toggle */
+.followup-toggle { margin-bottom: 12px; }
+.toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+    cursor: pointer;
+}
+.toggle-label input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
+.hint { font-size: 11px; color: #999; margin-top: 6px; }
+
+/* Actions */
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    padding: 20px 24px 24px;
+    margin-top: 8px;
+}
+.btn-cancel {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+}
+.btn-cancel:hover { background: #f5f5f5; }
+.btn-confirm {
+    flex: 2;
+    padding: 12px;
+    border: none;
+    background: #e74c3c;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+.btn-confirm:hover { background: #c0392b; }
+
+@media (max-width: 500px) {
+    .form-row { flex-direction: column; }
+    .modal-actions { flex-direction: column; }
+}

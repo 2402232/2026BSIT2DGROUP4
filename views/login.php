@@ -60,7 +60,7 @@
                 <!-- OPTIONS -->
                 <div class="options">
                     <label class="remember">
-                        <input type="checkbox"> Remember me
+                        <input type="checkbox" name="remember_me" value="1"> Remember me
                     </label>
                     <a href="#" class="forgot">Forgot password?</a>
                 </div>

@@ -99,6 +99,20 @@
                     <div class="em-actions">
                         <!-- Assign Responders Button -->
                         <button class="assign-btn <?php echo $assignedClass; ?>"><?php echo $em['assign'] . $em['responder']; ?></button>
+                        <!-- SMS Notify Buttons -->
+                        <form method="POST" action="<?php echo BASE_URL; ?>index.php?action=sms-emergency-received" style="display:inline;">
+                            <input type="hidden" name="user_phone" value="<?php echo $em['phone'] ?? ''; ?>">
+                            <input type="hidden" name="emergency_id" value="<?php echo $em['id']; ?>">
+                            <input type="hidden" name="emergency_type" value="<?php echo $em['type']; ?>">
+                            <button type="submit" class="assign-btn" style="background:#2980B9;color:#fff;border:none;cursor:pointer;" title="Send SMS to user">📲 Notify User</button>
+                        </form>
+                        <?php if ($em['status'] === 'RESOLVED'): ?>
+                        <form method="POST" action="<?php echo BASE_URL; ?>index.php?action=sms-resolved" style="display:inline;">
+                            <input type="hidden" name="user_phone" value="<?php echo $em['phone'] ?? ''; ?>">
+                            <input type="hidden" name="emergency_id" value="<?php echo $em['id']; ?>">
+                            <button type="submit" class="assign-btn" style="background:#27AE60;color:#fff;border:none;cursor:pointer;" title="SMS resolved">✅ Notify Resolved</button>
+                        </form>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <?php

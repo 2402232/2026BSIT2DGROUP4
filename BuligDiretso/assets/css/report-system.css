@@ -56,16 +56,6 @@ a {
   font-size: 20px;
 }
 
-.banner-icon a {
-  color: inherit;
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-
-.banner-icon a:hover {
-  opacity: 0.8;
-}
-
 /* ── PAGE WRAPPER ── */
 .page {
   margin: 0 auto;

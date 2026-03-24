@@ -13,10 +13,6 @@
 .alert-success{background:#d4edda;color:#155724;border:1px solid #c3e6cb;border-radius:6px;padding:12px 16px;margin-bottom:16px;font-size:.9rem}
 </style>
 
-<?php
-$role_labels = ['admin' => 'Admin', 'pwd' => 'User', 'responder' => 'Responder'];
-$role_display = $role_labels[$user['role']] ?? ucfirst($user['role']);
-?>
 <div class="profile-page">
     <a class="back-link" href="<?php echo BASE_URL; ?>index.php?action=dashboard">← Back to Dashboard</a>
 
@@ -25,29 +21,23 @@ $role_display = $role_labels[$user['role']] ?? ucfirst($user['role']);
             <div class="alert-success"><?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?></div>
         <?php endif; ?>
 
-        <?php if (!empty($_SESSION['error'])): ?>
-            <div class="alert alert-error"><?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?></div>
-        <?php endif; ?>
-
         <!-- Avatar -->
         <div class="avatar-wrap">
-            <?php
-                $avatarSrc = $user['profile_picture'] ?? '';
-                if (empty($avatarSrc)) {
-                    $avatarSrc = !empty($user['profile_photo'])
-                        ? (BASE_URL . $user['profile_photo'])
-                        : (ASSETS_PATH . 'images/default-avatar.png');
-                }
-            ?>
-            <img id="avatarImg" class="avatar-img"
-                 src="<?php echo htmlspecialchars($avatarSrc); ?>"
-                 alt="Profile photo">
-            <div id="avatarPh" class="avatar-placeholder" style="display:none">👤</div>
+            <?php if (!empty($user['profile_photo'])): ?>
+                <img id="avatarImg" class="avatar-img"
+                     src="<?php echo UPLOADS_URL . 'profiles/' . htmlspecialchars($user['profile_photo']); ?>"
+                     alt="Profile photo"
+                     onerror="this.style.display='none';document.getElementById('avatarPh').style.display='flex'">
+                <div id="avatarPh" class="avatar-placeholder" style="display:none">👤</div>
+            <?php else: ?>
+                <div id="avatarPh" class="avatar-placeholder">👤</div>
+                <img id="avatarImg" class="avatar-img" style="display:none" alt="">
+            <?php endif; ?>
         </div>
 
         <h2><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></h2>
         <div class="role-wrap">
-            <span class="role-badge"><?php echo strtoupper($role_display); ?></span>
+            <span class="role-badge"><?php echo strtoupper($user['role']); ?></span>
         </div>
 
         <form action="<?php echo BASE_URL; ?>index.php?action=update_profile" method="POST" enctype="multipart/form-data">

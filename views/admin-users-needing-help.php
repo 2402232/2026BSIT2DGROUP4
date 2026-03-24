@@ -1,6 +1,20 @@
 <link rel="stylesheet" href="<?php echo ASSETS_PATH . 'css/admin-users-needing-help.css'; ?>">
+<link rel="stylesheet" href="<?php echo ASSETS_PATH . 'css/assign-modal.css'; ?>">
 
 <?php require_once VIEW_PATH . 'includes/header.php'; ?>
+
+<?php if (!empty($_SESSION['sms_success'])): ?>
+    <div style="max-width:900px;margin:90px auto 0;padding:0 20px;">
+        <div class="sms-flash success">✅ <?php echo htmlspecialchars($_SESSION['sms_success']); ?></div>
+    </div>
+    <?php unset($_SESSION['sms_success']); ?>
+<?php endif; ?>
+<?php if (!empty($_SESSION['sms_error'])): ?>
+    <div style="max-width:900px;margin:90px auto 0;padding:0 20px;">
+        <div class="sms-flash error">❌ <?php echo htmlspecialchars($_SESSION['sms_error']); ?></div>
+    </div>
+    <?php unset($_SESSION['sms_error']); ?>
+<?php endif; ?>
 
 <div class="admin-wrapper">
 
@@ -60,7 +74,7 @@
                                 <i class="ri-phone-line"></i>
                                 <div>
                                     <span class="label">Contact Number</span>
-                                    <span class="value">+63 912 345 6789</span>
+                                    <span class="value">+63 963 618 2369</span>
                                 </div>
                             </div>
                             <div class="info-item">
@@ -109,7 +123,7 @@
                     </div>
 
                     <div class="card-actions">
-                        <button class="btn btn-assign">Assign Responders</button>
+                        <button class="btn btn-assign" onclick="openAssignModal('ER-A7ZX','Juan Dela Cruz','09636182369','123 Main St, Iloilo City','Medical Emergency',true,'medical')">Assign &amp; Notify</button>
                         <button class="btn btn-view">View User Details</button>
                     </div>
                 </div>
@@ -196,7 +210,7 @@
                     </div>
 
                     <div class="card-actions">
-                        <button class="btn btn-assign">Assign Responders</button>
+                        <button class="btn btn-assign" onclick="openAssignModal('ER-C3NDP','Maria Santos','+63 923 456 7890','456 Oak Avenue, Mandurriao','Fire Emergency',false,'')">Assign &amp; Notify</button>
                         <button class="btn btn-view">View User Details</button>
                     </div>
                 </div>
@@ -283,7 +297,7 @@
                     </div>
 
                     <div class="card-actions">
-                        <button class="btn btn-assign">Assign Responders</button>
+                        <button class="btn btn-assign" onclick="openAssignModal('ER-J7WBY','Pedro Garcia','+63 934 567 8901','789 Pine Street, Jaro District','Police Assistance',false,'')">Assign &amp; Notify</button>
                         <button class="btn btn-view">View User Details</button>
                     </div>
                 </div>
@@ -370,7 +384,7 @@
                     </div>
 
                     <div class="card-actions">
-                        <button class="btn btn-assign">Assign Responders</button>
+                        <button class="btn btn-assign" onclick="openAssignModal('ER-D7T2S','Ana Reyes','+63 945 678 9012','321 Elm Road, Molo District','Vehicle Accident',true,'pregnancy')">Assign &amp; Notify</button>
                         <button class="btn btn-view">View User Details</button>
                     </div>
                 </div>
@@ -380,5 +394,143 @@
 </div>
 
 
+<div id="assignModal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2><i class="ri-user-star-line"></i> Assign Responder &amp; Send SMS</h2>
+            <button class="modal-close" onclick="closeAssignModal()">✕</button>
+        </div>
+        <div class="modal-summary">
+            <span id="modal-em-id" class="em-tag"></span>
+            <span id="modal-em-type"></span>
+        </div>
+        <p class="modal-user-info">👤 <strong id="modal-user-name"></strong> | 📍 <span id="modal-user-loc"></span></p>
+
+        <form method="POST" action="<?php echo BASE_URL; ?>index.php?action=sms-assign-responder">
+            <input type="hidden" name="emergency_id" id="f-emergency-id">
+            <input type="hidden" name="user_phone" id="f-user-phone">
+            <input type="hidden" name="user_name" id="f-user-name">
+            <input type="hidden" name="location" id="f-location">
+            <input type="hidden" name="emergency_type" id="f-emergency-type">
+
+            <div class="modal-section">
+                <h4><i class="ri-user-star-line"></i> Responder Details</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Responder Name</label>
+                        <input type="text" name="responder_name" id="inp-responder-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Responder Phone</label>
+                        <input type="text" name="responder_phone" placeholder="09171234567 (optional)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-section">
+                <h4><i class="ri-time-line"></i> Estimated Time of Arrival</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>ETA</label>
+                        <select name="eta_minutes" id="eta-select" onchange="updateEtaLabel(this.value)">
+                            <option value="5">5 minutes</option>
+                            <option value="10" selected>10 minutes</option>
+                            <option value="15">15 minutes</option>
+                            <option value="20">20 minutes</option>
+                            <option value="30">30 minutes</option>
+                            <option value="45">45 minutes</option>
+                            <option value="60">1 hour</option>
+                            <option value="custom">Custom...</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="custom-eta-group" style="display:none;">
+                        <label>Custom (minutes)</label>
+                        <input type="number" name="eta_custom" id="eta-custom" min="1" max="240" placeholder="25">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-section">
+                <h4><i class="ri-message-2-line"></i> SMS Preview</h4>
+                <div class="sms-preview" id="sms-preview-box"></div>
+            </div>
+
+            <div class="modal-section" id="followup-section" style="display:none;">
+                <h4><i class="ri-hospital-line"></i> Follow-up Clinic Reminder</h4>
+                <label class="toggle-label">
+                    <input type="checkbox" name="send_followup" id="send-followup-chk" onchange="toggleFollowupMsg()">
+                    Send Barangay clinic follow-up SMS
+                </label>
+                <div id="followup-msg-area" style="display:none;margin-top:10px;">
+                    <div class="form-group">
+                        <label>Follow-up Message</label>
+                        <textarea name="followup_message" id="followup-msg-text" rows="4"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeAssignModal()">Cancel</button>
+                <button type="submit" class="btn-confirm"><i class="ri-send-plane-line"></i> Assign &amp; Send SMS</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <?php require_once VIEW_PATH . 'includes/footer.php'; ?>
 <script src="<?php echo ASSETS_PATH . 'js/admin-users-needing-help.js'; ?>"></script>
+<script>
+let _md = {};
+function openAssignModal(id, name, phone, location, type, needsFollowup, followupType) {
+    _md = { id, name, phone, location, type, needsFollowup, followupType };
+    document.getElementById('f-emergency-id').value = id;
+    document.getElementById('f-user-phone').value = phone;
+    document.getElementById('f-user-name').value = name;
+    document.getElementById('f-location').value = location;
+    document.getElementById('f-emergency-type').value = type;
+    document.getElementById('modal-em-id').textContent = id;
+    document.getElementById('modal-em-type').textContent = type;
+    document.getElementById('modal-user-name').textContent = name;
+    document.getElementById('modal-user-loc').textContent = location;
+
+    document.getElementById('followup-section').style.display = needsFollowup ? 'block' : 'none';
+    if (needsFollowup) {
+        const msgs = {
+            pregnancy: `BuligDiretso: Hi ${name}, as a follow-up, please visit your Barangay Health Center for a prenatal check-up. Bring your records and follow your health worker's advice.`,
+            children: `BuligDiretso: Hi ${name}, as a follow-up, your child may need a check-up at the Barangay Health Center within 24-48 hours.`,
+            medical: `BuligDiretso: Hi ${name}, as a follow-up, please visit your Barangay Health Center within 24 hours for further assessment.`
+        };
+        document.getElementById('followup-msg-text').value = msgs[followupType] || msgs.medical;
+    }
+    updateSmsPreview();
+    document.getElementById('assignModal').style.display = 'flex';
+}
+function closeAssignModal() { document.getElementById('assignModal').style.display = 'none'; }
+function updateEtaLabel(val) {
+    document.getElementById('custom-eta-group').style.display = val === 'custom' ? 'block' : 'none';
+    updateSmsPreview();
+}
+function getEta() {
+    const sel = document.getElementById('eta-select').value;
+    if (sel === 'custom') {
+        const v = document.getElementById('eta-custom').value;
+        return v ? `${v} minutes` : '?';
+    }
+    return parseInt(sel, 10) >= 60 ? '1 hour' : `${sel} minutes`;
+}
+function updateSmsPreview() {
+    const responder = document.getElementById('inp-responder-name').value || '[Responder Name]';
+    const eta = getEta();
+    document.getElementById('sms-preview-box').textContent =
+        `BuligDiretso: Hi ${_md.name || ''}, your ${_md.type || 'emergency'} report (#${_md.id || ''}) has been received. ` +
+        `Responder ${responder} is now ON THE WAY to your location at ${_md.location || ''}. ` +
+        `Estimated arrival: ${eta}. Please stay calm and keep your phone on. Stay safe!`;
+}
+function toggleFollowupMsg() {
+    document.getElementById('followup-msg-area').style.display =
+        document.getElementById('send-followup-chk').checked ? 'block' : 'none';
+}
+document.addEventListener('input', function (e) {
+    if (e.target.id === 'inp-responder-name' || e.target.id === 'eta-custom') updateSmsPreview();
+});
+</script>

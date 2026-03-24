@@ -63,10 +63,42 @@ class User {
      * @return array|null User row or null
      */
     public static function verifyLogin(string $email, string $password): ?array {
-        $user = self::findByEmail($email);
-        if (!$user || !function_exists('verify_password')) {
+        try {
+            $user = self::findByEmail($email);
+            if (!$user) {
+                return null;
+            }
+
+            $storedHash = (string)($user['password_hash'] ?? '');
+            if ($storedHash === '') {
+                return null;
+            }
+
+            $isValid = false;
+            if (function_exists('verify_password') && password_get_info($storedHash)['algo'] !== null) {
+                $isValid = verify_password($password, $storedHash);
+            } else {
+                // Backward compatibility for legacy plaintext/md5 passwords.
+                $isValid = hash_equals($storedHash, $password) || hash_equals($storedHash, md5($password));
+            }
+
+            if (!$isValid) {
+                return null;
+            }
+
+            // Auto-upgrade legacy password storage to strong hash.
+            if (password_get_info($storedHash)['algo'] === null && function_exists('hash_password')) {
+                $newHash = hash_password($password);
+                $pdo = db();
+                $stmt = $pdo->prepare("UPDATE users SET password_hash = ? WHERE id = ?");
+                $stmt->execute([$newHash, (int)$user['id']]);
+                $user['password_hash'] = $newHash;
+            }
+
+            return $user;
+        } catch (Throwable $e) {
+            error_log("Login verification error: " . $e->getMessage());
             return null;
         }
-        return verify_password($password, $user['password_hash']) ? $user : null;
     }
 }

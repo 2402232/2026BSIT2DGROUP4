@@ -3,7 +3,97 @@ require_once 'HomeController.php';
 require_once MODEL_PATH . 'user.php';
 
 class AuthController extends HomeController {
+    private const REMEMBER_COOKIE = 'bd_remember';
+    private const REMEMBER_DAYS = 30;
+
+    private function rememberSecret(): string {
+        return hash('sha256', DB_NAME . '|' . DB_USER . '|' . DB_HOST . '|BuligDiretsoRemember');
+    }
+
+    private function setUserSession(array $user): void {
+        $_SESSION['user_id'] = (int) $user['id'];
+        $_SESSION['user_name'] = trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? ''));
+        $_SESSION['user_email'] = $user['email'] ?? '';
+        $_SESSION['user_role'] = $user['role'] ?? 'pwd';
+    }
+
+    private function createRememberCookie(int $userId): void {
+        $expiresAt = time() + (self::REMEMBER_DAYS * 86400);
+        $signature = hash_hmac('sha256', $userId . '|' . $expiresAt, $this->rememberSecret());
+        $value = $userId . ':' . $expiresAt . ':' . $signature;
+        setcookie(self::REMEMBER_COOKIE, $value, [
+            'expires'  => $expiresAt,
+            'path'     => '/',
+            'secure'   => !IS_LOCAL,
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+    }
+
+    public static function clearRememberCookie(): void {
+        setcookie(self::REMEMBER_COOKIE, '', [
+            'expires'  => time() - 3600,
+            'path'     => '/',
+            'secure'   => !IS_LOCAL,
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+    }
+
+    public static function autoLoginFromRememberCookie(): bool {
+        if (!empty($_SESSION['user_id']) || empty($_COOKIE[self::REMEMBER_COOKIE])) {
+            return false;
+        }
+
+        $raw = (string)$_COOKIE[self::REMEMBER_COOKIE];
+        $parts = explode(':', $raw);
+        if (count($parts) !== 3) {
+            self::clearRememberCookie();
+            return false;
+        }
+
+        [$userIdRaw, $expiresRaw, $signature] = $parts;
+        $userId = (int)$userIdRaw;
+        $expiresAt = (int)$expiresRaw;
+        if ($userId <= 0 || $expiresAt < time()) {
+            self::clearRememberCookie();
+            return false;
+        }
+
+        $secret = hash('sha256', DB_NAME . '|' . DB_USER . '|' . DB_HOST . '|BuligDiretsoRemember');
+        $expected = hash_hmac('sha256', $userId . '|' . $expiresAt, $secret);
+        if (!hash_equals($expected, $signature)) {
+            self::clearRememberCookie();
+            return false;
+        }
+
+        try {
+            $user = User::findById($userId);
+            if (!$user) {
+                self::clearRememberCookie();
+                return false;
+            }
+
+            $_SESSION['user_id'] = (int)$user['id'];
+            $_SESSION['user_name'] = trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? ''));
+            $_SESSION['user_email'] = $user['email'] ?? '';
+            $_SESSION['user_role'] = $user['role'] ?? 'pwd';
+            return true;
+        } catch (Throwable $e) {
+            error_log("Auto-login cookie error: " . $e->getMessage());
+            self::clearRememberCookie();
+            return false;
+        }
+    }
+
     public function showLogin() {
+        if (!empty($_SESSION['user_id'])) {
+            $role = $_SESSION['user_role'] ?? 'pwd';
+            $target = ($role === 'admin') ? 'admin-dashboard' : 'dashboard';
+            header("Location: " . BASE_URL . "index.php?action=" . $target);
+            exit();
+        }
+
         $pageTitle = "Login - BuligDiretso";
 
         // Shared header/footer data
@@ -30,8 +120,9 @@ class AuthController extends HomeController {
             exit();
         }
 
-        $email = trim($_POST['email'] ?? '');
+        $email = strtolower(trim($_POST['email'] ?? ''));
         $password = $_POST['password'] ?? '';
+        $rememberMe = !empty($_POST['remember_me']);
 
         if (empty($email) || empty($password)) {
             $_SESSION['error'] = "All fields are required!";
@@ -39,12 +130,22 @@ class AuthController extends HomeController {
             exit();
         }
 
-        $user = User::verifyLogin($email, $password);
+        try {
+            $user = User::verifyLogin($email, $password);
+        } catch (Throwable $e) {
+            error_log("Process login error: " . $e->getMessage());
+            $_SESSION['error'] = "Unable to log in right now. Please try again.";
+            header("Location: " . BASE_URL . "index.php?action=login");
+            exit();
+        }
+
         if ($user) {
-            $_SESSION['user_id'] = (int) $user['id'];
-            $_SESSION['user_name'] = trim($user['first_name'] . ' ' . $user['last_name']);
-            $_SESSION['user_email'] = $user['email'];
-            $_SESSION['user_role'] = $user['role'];
+            $this->setUserSession($user);
+            if ($rememberMe) {
+                $this->createRememberCookie((int)$user['id']);
+            } else {
+                self::clearRememberCookie();
+            }
             $_SESSION['success'] = "Login successful!";
 
             if ($user['role'] === 'admin') {
@@ -195,6 +296,8 @@ class AuthController extends HomeController {
      * Logout user
      */
     public function logout() {
+        self::clearRememberCookie();
+        $_SESSION = [];
         session_destroy();
         header("Location: " . BASE_URL . "index.php?action=home");
         exit();

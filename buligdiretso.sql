@@ -217,7 +217,7 @@ CREATE TABLE activity_logs (
 -- ------------------------------------------------------------
 INSERT INTO users (id, first_name, last_name, email, phone, date_of_birth, address, role, password_hash) VALUES
 (1,  'Admin',    'User',     'admin@gmail.com',        '09000000001', '1990-01-01', 'Isabela, Negros Occidental',          'admin',     '$2y$12$KIXzH3A0zVm1gRMRPuFIaOjvBJp5jFr3GWVVSnMBhbPxwPdJV4nOK'),
-(2,  'Juan',     'Dela Cruz','user@gmail.com',         '09123456789', '1995-06-15', '123 Main St, Isabela, Negros Occ.',   'pwd',       '$2y$12$ByTGxHSl4E9R7kV2Yv5eCeEW7zDdp0i4yCaWPsUmFqLg5HUOkB.iW'),
+(2,  'Juan',     'Dela Cruz','user@gmail.com',         '09636182369', '1995-06-15', '123 Main St, Isabela, Negros Occ.',   'pwd',       '$2y$12$ByTGxHSl4E9R7kV2Yv5eCeEW7zDdp0i4yCaWPsUmFqLg5HUOkB.iW'),
 (3,  'Maria',    'Santos',   'maria.santos@email.com', '09987654321', '1993-03-22', 'Brgy. Balud, Isabela, Negros Occ.',   'pwd',       '$2y$12$ByTGxHSl4E9R7kV2Yv5eCeEW7zDdp0i4yCaWPsUmFqLg5HUOkB.iW'),
 (4,  'John',     'Santoso',  'john.santoso@email.com', '09171112233', '1988-09-10', 'Brgy. Balud, Isabela, Negros Occ.',   'responder', '$2y$12$QpLvLMz6Nk8r2jT5qXbB7.HZ4cXkFDp5G3sOT7MkiK6Dm9Z3REqsO'),
 (5,  'Mario',    'Reyes',    'mario.reyes@email.com',  '09229998877', '1985-12-05', 'Brgy. Cabcab, Isabela, Negros Occ.', 'responder', '$2y$12$QpLvLMz6Nk8r2jT5qXbB7.HZ4cXkFDp5G3sOT7MkiK6Dm9Z3REqsO'),
@@ -300,7 +300,7 @@ INSERT INTO faqs (question, answer, display_order) VALUES
 -- Sample Contact Submission
 -- ------------------------------------------------------------
 INSERT INTO contact_submissions (user_id, full_name, email, phone, subject, message) VALUES
-(2, 'Juan Dela Cruz', 'user@gmail.com', '09123456789',
+(2, 'Juan Dela Cruz', 'user@gmail.com', '09636182369',
  'Question about response times',
  'I submitted an emergency report but I am unsure how to track it. Can you help?');
 
