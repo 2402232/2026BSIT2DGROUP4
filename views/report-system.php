@@ -5,18 +5,14 @@
 
     <!-- Top Bar -->
     <div class="top-bar">
-         <!-- Red Emergency Banner -->
-        
-             <div class="banner-text">
-                <i class="ri-error-warning-line"></i> 
-                <h2>Emergency Response System</h2>
-             </div>
-             
-             <div class="banner-icon">
-                <i class="ri-group-fill"></i>
-                <i class="ri-pulse-line"></i>
-             </div>
-         
+        <div class="banner-text">
+            <i class="ri-error-warning-line"></i>
+            <h2>Emergency Response System</h2>
+        </div>
+        <div class="banner-icon">
+            <i class="ri-group-fill"></i>
+            <i class="ri-pulse-line"></i>
+        </div>
     </div>
 
     <!-- Page Content -->
@@ -30,7 +26,7 @@
         </div>
 
         <div class="card">
-            <form action="submit_emergency.php" method="POST" enctype="multipart/form-data">
+            <form id="emergencyForm" action="submit_emergency.php" method="POST" enctype="multipart/form-data">
 
                 <!-- Hidden fields -->
                 <input type="hidden" name="emergency_type" id="emergency_type" required>
@@ -106,16 +102,33 @@
 
                 <!-- Upload -->
                 <div class="form-field">
-                    <label>Upload photos/videos (Optional)</label>
-                    <div class="upload-area" onclick="document.getElementById('file_upload').click()">
-                        <div class="ua-icon">📷</div>
-                        <p>Click to upload or drag and drop</p>
-                        <small>Images, videos up to 10mb</small>
-                        <input type="file" name="file_upload" id="file_upload" hidden accept="image/*,video/*">
+                    <label>Upload photos/videos <span class="optional-tag">(Optional)</span></label>
+
+                    <!-- Drop Zone -->
+                    <div class="upload-zone" id="uploadZone">
+                        <input
+                            type="file"
+                            name="file_uploads[]"
+                            id="file_upload"
+                            multiple
+                            accept="image/*,video/*"
+                            class="upload-input"
+                        >
+                        <div class="upload-zone-inner" id="uploadPrompt">
+                            <div class="uz-icon"><i class="ri-upload-cloud-2-line"></i></div>
+                            <p class="uz-main">Drag & drop files here, or <span class="uz-browse">browse</span></p>
+                            <p class="uz-sub">Supports JPG, PNG, GIF, MP4, MOV &nbsp;·&nbsp; Max 10 MB per file &nbsp;·&nbsp; Up to 5 files</p>
+                        </div>
                     </div>
+
+                    <!-- Preview Grid -->
+                    <div class="preview-grid" id="previewGrid"></div>
+
+                    <!-- File count indicator -->
+                    <p class="file-count" id="fileCount" style="display:none;"></p>
                 </div>
 
-                <button type="submit" class="btn-submit">SUBMIT</button>
+                <button type="submit" class="btn-submit" id="submitBtn">SUBMIT</button>
 
             </form>
         </div>

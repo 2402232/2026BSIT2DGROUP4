@@ -72,6 +72,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     assignButtons.forEach(button => {
         button.addEventListener('click', function() {
+            // If modal-driven assign exists, let inline handler manage it.
+            if (typeof window.openAssignModal === 'function' && this.getAttribute('onclick')) {
+                return;
+            }
             const card = this.closest('.emergency-card');
             const emergencyId = card.querySelector('.emergency-id h3').textContent;
             const userName = card.querySelector('.info-item .value').textContent;

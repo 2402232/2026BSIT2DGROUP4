@@ -1,8 +1,9 @@
 <?php
-session_start();
-
-// Load config FIRST using real path
+// Load config FIRST so session is started with secure settings
 require_once __DIR__ . '/config/config.php';
+
+require_once CONTROLLER_PATH . 'AuthController.php';
+AuthController::autoLoginFromRememberCookie();
 
 $action = $_GET['action'] ?? 'home';
 
@@ -103,6 +104,19 @@ switch ($action) {
         (new AdminController())->responders();
         break;
 
+<<<<<<< HEAD
+=======
+    case 'users-profile':
+        require_once CONTROLLER_PATH . 'UserController.php';
+        (new UserController())->showUsersprofile();
+        break;
+
+    case 'sms-assign-responder':
+        require_once CONTROLLER_PATH . 'SmsController.php';
+        (new SmsController())->assignResponder();
+        break;
+
+>>>>>>> 8bef1adb7c8b48d7537eaa3e7c3fbb50e0d2e1ea
     default:
         require_once CONTROLLER_PATH . 'HomeController.php';
         (new HomeController())->index();
