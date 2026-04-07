@@ -37,35 +37,29 @@
             ];
 
             foreach ($guides as $guide): ?>
-            <div class="guide-item" data-title="<?php echo strtolower($guide['title']); ?>">
-                <a class="guide-item-main"
-                   href="index.php?action=guide-detail&guide=<?php echo htmlspecialchars($guide['slug']); ?>">
-                    <div class="guide-item-left">
-                        <p class="guide-title">
-                            <i class="<?php echo $guide['icon']; ?>" style="color:#22C55E; margin-right:6px; font-size:15px;"></i>
-                            <?php echo htmlspecialchars($guide['title']); ?>
-                        </p>
-                        <div class="guide-meta">
-                            <span class="guide-category"><?php echo htmlspecialchars($guide['category']); ?></span>
-                            <span class="guide-read">
-                                <i class="ri-time-line"></i>
-                                <?php echo htmlspecialchars($guide['read']); ?>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="guide-item-right">
-                        <span class="guide-btn" aria-label="Read <?php echo htmlspecialchars($guide['title']); ?>">
-                            <i class="ri-arrow-right-line"></i>
+            <a class="guide-item" 
+               data-title="<?php echo strtolower($guide['title']); ?>"
+               href="index.php?action=guide-detail&guide=<?php echo $guide['slug']; ?>"
+               style="text-decoration:none; color:inherit; display:flex; align-items:center; justify-content:space-between;">
+                <div class="guide-item-left">
+                    <p class="guide-title">
+                        <i class="<?php echo $guide['icon']; ?>" style="color:#22C55E; margin-right:6px; font-size:15px;"></i>
+                        <?php echo $guide['title']; ?>
+                    </p>
+                    <div class="guide-meta">
+                        <span class="guide-category"><?php echo $guide['category']; ?></span>
+                        <span class="guide-read">
+                            <i class="ri-time-line"></i>
+                            <?php echo $guide['read']; ?>
                         </span>
                     </div>
-                </a>
-                <a class="guide-pdf-btn"
-                   href="<?php echo BASE_URL; ?>index.php?action=guide-pdf&guide=<?php echo urlencode($guide['slug']); ?>"
-                   title="Download PDF"
-                   aria-label="Download <?php echo htmlspecialchars($guide['title']); ?> as PDF">
-                    <i class="ri-file-pdf-2-line"></i>
-                </a>
-            </div>
+                </div>
+                <div class="guide-item-right">
+                    <div class="guide-btn" aria-label="Read <?php echo $guide['title']; ?>">
+                        <i class="ri-arrow-right-line"></i>
+                    </div>
+                </div>
+            </a>
             <?php endforeach; ?>
         </div>
 

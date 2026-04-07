@@ -118,39 +118,7 @@
     border-bottom: 1px solid #F2F4F7;
     transition: background 0.15s;
     border-radius: 8px;
-    gap: 10px;
-}
-
-.guide-item-main {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     gap: 12px;
-    text-decoration: none;
-    color: inherit;
-}
-
-.guide-pdf-btn {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
-    background: #FEE2E2;
-    color: #DC2626;
-    font-size: 20px;
-    text-decoration: none;
-    transition: background 0.15s, transform 0.12s;
-}
-
-.guide-pdf-btn:hover {
-    background: #FECACA;
-    transform: scale(1.05);
-    color: #B91C1C;
 }
 
 .guide-item:last-child {

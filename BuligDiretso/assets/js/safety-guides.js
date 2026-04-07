@@ -19,3 +19,15 @@ searchInput.addEventListener('input', function () {
 
     noResults.style.display = visibleCount === 0 ? 'flex' : 'none';
 });
+
+// Read button click — placeholder for opening a guide detail view
+guideList.addEventListener('click', function (e) {
+    const btn = e.target.closest('.guide-btn');
+    if (!btn) return;
+
+    const item  = btn.closest('.guide-item');
+    const title = item.querySelector('.guide-title').textContent;
+
+    // TODO: replace with navigation to guide detail page
+    console.log('Opening guide:', title);
+});

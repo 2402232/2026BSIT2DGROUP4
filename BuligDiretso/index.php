@@ -1,8 +1,9 @@
 <?php
-session_start();
-
-// Load config FIRST using real path
+// Load config FIRST so session is started with secure settings
 require_once __DIR__ . '/config/config.php';
+
+require_once CONTROLLER_PATH . 'AuthController.php';
+AuthController::autoLoginFromRememberCookie();
 
 $action = $_GET['action'] ?? 'home';
 
@@ -72,11 +73,6 @@ switch ($action) {
         (new UserController())->showGuideDetail();
         break;
 
-    case 'guide-pdf':
-        require_once CONTROLLER_PATH . 'UserController.php';
-        (new UserController())->downloadSafetyGuidePdf();
-        break;
-
     case 'faq':
         require_once CONTROLLER_PATH . 'UserController.php';
         (new UserController())->showFaq();
@@ -101,6 +97,43 @@ switch ($action) {
     case 'responders':
         require_once CONTROLLER_PATH . 'AdminController.php';
         (new AdminController())->responders();
+        break;
+
+    case 'users-profile':
+        require_once CONTROLLER_PATH . 'UserController.php';
+        (new UserController())->showUsersprofile();
+        break;
+
+    case 'sms-assign-responder':
+        require_once CONTROLLER_PATH . 'SmsController.php';
+        (new SmsController())->assignResponder();
+        break;
+
+    // ── SMS routes ───────────────────────────────────────────────────
+    case 'sms-emergency-received':
+        require_once CONTROLLER_PATH . 'SmsController.php';
+        (new SmsController())->emergencyReceived();
+        break;
+
+    case 'sms-responder-assigned':
+        require_once CONTROLLER_PATH . 'SmsController.php';
+        (new SmsController())->responderAssigned();
+        break;
+
+    case 'sms-resolved':
+        require_once CONTROLLER_PATH . 'SmsController.php';
+        (new SmsController())->emergencyResolved();
+        break;
+
+    case 'sms-broadcast':
+        require_once CONTROLLER_PATH . 'SmsController.php';
+        (new SmsController())->broadcast();
+        break;
+    // ────────────────────────────────────────────────────────────────
+
+    case 'admin-sms':
+        require_once CONTROLLER_PATH . 'AdminController.php';
+        (new AdminController())->smsCenter();
         break;
 
     default:

@@ -56,34 +56,6 @@
     line-height: 1.6;
 }
 
-.detail-hero-actions {
-    margin-top: 14px;
-}
-
-.btn-download-pdf {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    border-radius: 10px;
-    background: #DC2626;
-    color: #fff;
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background 0.15s, transform 0.12s;
-}
-
-.btn-download-pdf:hover {
-    background: #B91C1C;
-    color: #fff;
-    transform: translateY(-1px);
-}
-
-.btn-download-pdf i {
-    font-size: 18px;
-}
-
 /* ── BODY ── */
 .detail-body {
     display: flex;

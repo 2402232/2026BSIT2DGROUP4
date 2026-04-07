@@ -1,0 +1,116 @@
+/* admin-sms.css — SMS Center styles for BuligDiretso */
+
+.sms-alert {
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    font-size: 14px;
+}
+.sms-alert.success { background: #eafaf1; color: #1e8449; border: 1px solid #a9dfbf; }
+.sms-alert.error   { background: #fdf2f2; color: #c0392b; border: 1px solid #f5b7b1; }
+
+.sms-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.sms-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+.sms-card.wide {
+    grid-column: 1 / -1;
+}
+
+.sms-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px;
+    color: #fff;
+}
+.sms-card-header i  { font-size: 20px; }
+.sms-card-header h3 { font-size: 15px; font-weight: 600; margin: 0; }
+
+.sms-card-header.blue   { background: #2980B9; }
+.sms-card-header.red    { background: #E74C3C; }
+.sms-card-header.orange { background: #E67E22; }
+.sms-card-header.green  { background: #27AE60; }
+.sms-card-header.purple { background: #8E44AD; }
+
+.sms-card-body {
+    padding: 20px;
+}
+
+.sms-desc {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 14px;
+    line-height: 1.5;
+}
+
+.sms-card-body label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 5px;
+    margin-top: 12px;
+}
+.sms-card-body label:first-of-type { margin-top: 0; }
+.sms-card-body label small { font-weight: 400; color: #999; }
+
+.sms-card-body input[type="text"],
+.sms-card-body select,
+.sms-card-body textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #333;
+    background: #fafafa;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+.sms-card-body input[type="text"]:focus,
+.sms-card-body select:focus,
+.sms-card-body textarea:focus {
+    outline: none;
+    border-color: #2980B9;
+    background: #fff;
+}
+
+.sms-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 11px;
+    margin-top: 16px;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.sms-btn:hover   { opacity: 0.88; }
+.sms-btn.blue    { background: #2980B9; }
+.sms-btn.red     { background: #E74C3C; }
+.sms-btn.orange  { background: #E67E22; }
+.sms-btn.green   { background: #27AE60; }
+.sms-btn.purple  { background: #8E44AD; }
+
+@media (max-width: 640px) {
+    .sms-grid { grid-template-columns: 1fr; }
+    .sms-card.wide { grid-column: 1; }
+}
