@@ -104,8 +104,6 @@ switch ($action) {
         (new AdminController())->responders();
         break;
 
-<<<<<<< HEAD
-=======
     case 'users-profile':
         require_once CONTROLLER_PATH . 'UserController.php';
         (new UserController())->showUsersprofile();
@@ -116,7 +114,6 @@ switch ($action) {
         (new SmsController())->assignResponder();
         break;
 
->>>>>>> 8bef1adb7c8b48d7537eaa3e7c3fbb50e0d2e1ea
     default:
         require_once CONTROLLER_PATH . 'HomeController.php';
         (new HomeController())->index();
