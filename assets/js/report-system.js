@@ -9,6 +9,15 @@ document.querySelectorAll('.emergency-box').forEach(function(box) {
     });
 });
 
+// ── Priority level selection ──────────────────────────────────
+document.querySelectorAll('.priority-box').forEach(function(box) {
+    box.addEventListener('click', function() {
+        document.querySelectorAll('.priority-box').forEach(b => b.classList.remove('selected'));
+        this.classList.add('selected');
+        document.getElementById('severity').value = this.getAttribute('data-severity');
+    });
+});
+
 // ── File Upload with Preview ──────────────────────────────────
 const uploadZone  = document.getElementById('uploadZone');
 const fileInput   = document.getElementById('file_upload');

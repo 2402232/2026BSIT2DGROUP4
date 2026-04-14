@@ -39,32 +39,34 @@
         <!-- Emergency List -->
         <div class="emergency-list">
             <?php
-            // Sample emergency data (later replace with database)
-            $emergencies = [
-                ['id' => 'ER-KP376', 'status' => 'CRITICAL', 'type' => 'Medical', 'desc' => 'Heart attack at City', 'loc' => 'Central St.', 'color' => '#E74C3C'],
-                ['id' => 'ER-GH201', 'status' => 'MODERATE', 'type' => 'Fire', 'desc' => 'Kitchen fire', 'loc' => '5th Ave', 'color' => '#F39C12'],
-                ['id' => 'ER-TU190', 'status' => 'CRITICAL', 'type' => 'Medical', 'desc' => 'Severe bleeding', 'loc' => 'Park Rd.', 'color' => '#E74C3C'],
-                ['id' => 'ER-QP443', 'status' => 'MODERATE', 'type' => 'Crime', 'desc' => 'Robbery in progress', 'loc' => 'Market St.', 'color' => '#F39C12'],
-                ['id' => 'ER-MN928', 'status' => 'RESOLVED', 'type' => 'Traffic', 'desc' => 'Car accident', 'loc' => 'Highway 5', 'color' => '#27AE60'],
-                ['id' => 'ER-FT837', 'status' => 'MODERATE', 'type' => 'Medical', 'desc' => 'Broken arm', 'loc' => 'School', 'color' => '#F39C12']
-            ];
-
-            foreach ($emergencies as $em) {
-                ?>
-                <div class="emergency-item">
-                    <div class="emergency-top">
-                        <span class="em-id"><?php echo $em['id']; ?></span>
-                        <span class="em-status" style="background-color: <?php echo $em['color']; ?>">
-                            <?php echo $em['status']; ?>
-                        </span>
-                        <span class="em-type"><?php echo $em['type']; ?></span>
+            if (empty($emergencies)) {
+                echo '<p class="no-emergencies">No emergency reports found.</p>';
+            } else {
+                foreach ($emergencies as $emergency) {
+                    $statusColor = match($emergency['status']) {
+                        'pending' => '#F39C12',
+                        'responding' => '#E74C3C',
+                        'resolved' => '#27AE60',
+                        'cancelled' => '#95A5A6',
+                        default => '#95A5A6'
+                    };
+                    ?>
+                    <div class="emergency-item">
+                        <div class="emergency-top">
+                            <span class="em-id"><?php echo htmlspecialchars($emergency['report_code']); ?></span>
+                            <span class="em-status" style="background-color: <?php echo $statusColor; ?>">
+                                <?php echo htmlspecialchars(strtoupper($emergency['status'])); ?>
+                            </span>
+                            <span class="em-type"><?php echo htmlspecialchars($emergency['emergency_type']); ?></span>
+                        </div>
+                        <div class="emergency-info">
+                            <p class="em-desc"><?php echo htmlspecialchars($emergency['description'] ?: 'No description'); ?></p>
+                            <p class="em-loc">Location: <?php echo htmlspecialchars($emergency['location']); ?></p>
+                            <p class="em-time"><?php echo date('M d, Y H:i', strtotime($emergency['created_at'])); ?></p>
+                        </div>
                     </div>
-                    <div class="emergency-info">
-                        <p class="em-desc"><?php echo $em['desc']; ?></p>
-                        <p class="em-loc">Location: <?php echo $em['loc']; ?></p>
-                    </div>
-                </div>
-                <?php
+                    <?php
+                }
             }
             ?>
         </div>

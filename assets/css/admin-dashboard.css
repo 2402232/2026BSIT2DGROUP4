@@ -431,3 +431,211 @@
         font-size: 11px;
     }
 }
+/* ── Top Bar Actions ─────────────────────────── */
+.top-bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.date-label {
+    font-size: 12px;
+    color: #7F8C8D;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #E74C3C;
+    color: white;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+.action-btn:hover { background: #C0392B; }
+.action-btn.secondary { background: #1A3A52; }
+.action-btn.secondary:hover { background: #243e56; }
+
+/* ── Stat icon wrap ──────────────────────────── */
+.stat-icon-wrap {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+}
+.stat-icon-wrap.red   { background: #FDECEA; color: #E74C3C; }
+.stat-icon-wrap.green { background: #EAFAF1; color: #27AE60; }
+.stat-icon-wrap.orange{ background: #FEF9E7; color: #F39C12; }
+.stat-icon-wrap.blue  { background: #EBF5FB; color: #3498DB; }
+
+/* ── Charts Row ──────────────────────────────── */
+.charts-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+.chart-card {
+    background: white;
+    border: 1px solid #E0E0E0;
+    border-radius: 10px;
+    padding: 16px;
+}
+.chart-card.wide { /* already in grid */ }
+.chart-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+.chart-card-header h3 {
+    font-size: 13px;
+    color: #2C3E50;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+}
+.chart-card-header p {
+    font-size: 11px;
+    color: #95A5A6;
+    margin: 0;
+}
+.chart-legend {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    color: #7F8C8D;
+}
+.legend-dot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin-right: 3px;
+}
+.legend-dot.medical  { background: #E74C3C; }
+.legend-dot.fire     { background: #F39C12; }
+.legend-dot.accident { background: #3498DB; }
+
+.donut-legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 11px;
+    color: #555;
+}
+.donut-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.donut-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ── View all / stats link ───────────────────── */
+.view-all-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #E74C3C;
+    text-decoration: none;
+    margin-left: auto;
+    font-weight: 500;
+}
+.view-all-btn:hover { text-decoration: underline; }
+.stats-link {
+    font-size: 11px;
+    color: #3498DB;
+    text-decoration: none;
+}
+.stats-link:hover { text-decoration: underline; }
+
+/* ── Section header update ───────────────────── */
+.section-header { justify-content: flex-start; }
+
+/* ── Progress fill green ─────────────────────── */
+.progress-fill.green { background: #27AE60; }
+
+/* ── Rank medals ─────────────────────────────── */
+.rank.gold   { background: #F1C40F; }
+.rank.silver { background: #95A5A6; }
+.rank.bronze { background: #CA6F1E; }
+
+/* ── Quick Links ─────────────────────────────── */
+.quick-links-section {
+    margin-top: 20px;
+}
+.section-title {
+    font-size: 14px;
+    color: #2C3E50;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.quick-links-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+.quick-link-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    border: 1px solid #E0E0E0;
+    border-radius: 10px;
+    padding: 14px;
+    text-decoration: none;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+.quick-link-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border-color: #C0392B;
+}
+.ql-icon {
+    width: 38px; height: 38px;
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.ql-icon.red    { background: #FDECEA; color: #E74C3C; }
+.ql-icon.blue   { background: #EBF5FB; color: #3498DB; }
+.ql-icon.green  { background: #EAFAF1; color: #27AE60; }
+.ql-icon.orange { background: #FEF9E7; color: #F39C12; }
+.ql-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+.ql-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #2C3E50;
+}
+.ql-desc {
+    font-size: 11px;
+    color: #95A5A6;
+    margin-top: 2px;
+}
+.ql-arrow { color: #BDC3C7; font-size: 16px; }
+
+/* ── Responsive ──────────────────────────────── */
+@media (max-width: 768px) {
+    .charts-row { grid-template-columns: 1fr; }
+    .quick-links-grid { grid-template-columns: repeat(2, 1fr); }
+    .top-bar-actions { display: none; }
+}

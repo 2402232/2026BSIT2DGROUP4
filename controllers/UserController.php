@@ -73,6 +73,26 @@ class UserController {
             'currentAction' => $_GET['action'] ?? 'dashboard',
         ];
     }
+
+    /**
+     * Get user's emergency reports
+     */
+    private function getUserEmergencies() {
+        try {
+            $pdo = db();
+            $stmt = $pdo->prepare("
+                SELECT id, report_code, emergency_type, severity, status, description, location, created_at
+                FROM emergency_reports 
+                WHERE user_id = ? 
+                ORDER BY created_at DESC
+            ");
+            $stmt->execute([$_SESSION['user_id']]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            error_log("Error fetching emergencies: " . $e->getMessage());
+            return [];
+        }
+    }
         /**
      * Check if user is logged in
      */
@@ -118,11 +138,13 @@ class UserController {
         $this->requireLogin();
         $pageTitle = "Emergency Dashboard - Bulig Diretso";
 
+        // Fetch emergency data from database
+        $emergencies = $this->getUserEmergencies();
+
         // Shared header/footer data
         extract($this->getSharedData());
 
         require_once VIEW_PATH . 'emergency-dashboard.php';
-
     }
     /**
      * Tracking

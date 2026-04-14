@@ -42,113 +42,101 @@
             </div>
 
             <div class="emergency-list">
-                                <div class="emergency-card">
-                    <div class="card-header">
-                        <div class="emergency-id">
-                            <span class="badge badge-critical">CRITICAL</span>
-                            <span class="badge badge-pending">PENDING</span>
-                            <h3>ER-A7ZX</h3>
-                        </div>
-                    </div>
-                    
-                    <div class="card-body">
-                        <div class="info-row">
-                            <div class="info-item">
-                                <i class="ri-user-line"></i>
-                                <div>
-                                    <span class="label">User Information</span>
-                                    <span class="value">Juan Dela Cruz</span>
+                <?php if (empty($emergencies)): ?>
+                    <p class="no-emergencies">No emergency reports found.</p>
+                <?php else: ?>
+                    <?php foreach ($emergencies as $emergency): ?>
+                        <div class="emergency-card">
+                            <div class="card-header">
+                                <div class="emergency-id">
+                                    <span class="badge badge-<?php echo strtolower($emergency['severity']); ?>">
+                                        <?php echo strtoupper($emergency['severity']); ?>
+                                    </span>
+                                    <span class="badge badge-<?php echo $emergency['status']; ?>">
+                                        <?php echo strtoupper($emergency['status']); ?>
+                                    </span>
+                                    <h3><?php echo htmlspecialchars($emergency['report_code']); ?></h3>
                                 </div>
                             </div>
-                            <div class="info-item">
-                                <i class="ri-time-line"></i>
-                                <div>
-                                    <span class="label">Created On</span>
-                                    <span class="value">12:34:05 AM</span>
+                            
+                            <div class="card-body">
+                                <div class="info-row">
+                                    <div class="info-item">
+                                        <i class="ri-user-line"></i>
+                                        <div>
+                                            <span class="label">User Information</span>
+                                            <span class="value"><?php echo htmlspecialchars($emergency['first_name'] . ' ' . $emergency['last_name']); ?></span>
+                                        </div>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="ri-time-line"></i>
+                                        <div>
+                                            <span class="label">Created On</span>
+                                            <span class="value"><?php echo date('h:i:s A', strtotime($emergency['created_at'])); ?></span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="info-row">
-                            <div class="info-item">
-                                <i class="ri-phone-line"></i>
-                                <div>
-                                    <span class="label">Contact Number</span>
-                                    <span class="value">+63 963 618 2369</span>
+                                <div class="info-row">
+                                    <div class="info-item">
+                                        <i class="ri-phone-line"></i>
+                                        <div>
+                                            <span class="label">Contact Number</span>
+                                            <span class="value"><?php echo htmlspecialchars($emergency['phone']); ?></span>
+                                        </div>
+                                    </div>
+                                    <div class="info-item">
+                                        <i class="ri-calendar-line"></i>
+                                        <div>
+                                            <span class="label">Updated On</span>
+                                            <span class="value"><?php echo date('h:i:s A', strtotime($emergency['updated_at'])); ?></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="info-row">
+                                    <div class="info-item full-width">
+                                        <i class="ri-map-pin-line"></i>
+                                        <div>
+                                            <span class="label">Location</span>
+                                            <span class="value"><?php echo htmlspecialchars($emergency['location']); ?></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="info-row">
+                                    <div class="info-item full-width">
+                                        <i class="ri-alert-line"></i>
+                                        <div>
+                                            <span class="label">Emergency Type</span>
+                                            <span class="value"><?php echo htmlspecialchars($emergency['emergency_type']); ?> Emergency</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="info-row">
+                                    <div class="info-item full-width">
+                                        <i class="ri-file-text-line"></i>
+                                        <div>
+                                            <span class="label">Description</span>
+                                            <span class="value"><?php echo htmlspecialchars($emergency['description'] ?: 'No description provided'); ?></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="responder-section">
+                                    <span class="responder-label">Responder Assigned:</span>
+                                    <span class="no-responder">No responder assigned yet</span>
                                 </div>
                             </div>
-                            <div class="info-item">
-                                <i class="ri-calendar-line"></i>
-                                <div>
-                                    <span class="label">Updated On</span>
-                                    <span class="value">12:34:12 AM</span>
-                                </div>
+
+                            <div class="card-actions">
+                                <button class="btn btn-assign" onclick="openAssignModal('<?php echo $emergency['report_code']; ?>','<?php echo htmlspecialchars($emergency['first_name'] . ' ' . $emergency['last_name']); ?>','<?php echo htmlspecialchars($emergency['phone']); ?>','<?php echo htmlspecialchars($emergency['location']); ?>','<?php echo htmlspecialchars($emergency['emergency_type']); ?> Emergency',true,'<?php echo strtolower($emergency['emergency_type']); ?>')">Assign &amp; Notify</button>
+                                <button class="btn btn-view">View User Details</button>
                             </div>
                         </div>
-
-                        <div class="info-row">
-                            <div class="info-item full-width">
-                                <i class="ri-map-pin-line"></i>
-                                <div>
-                                    <span class="label">Location</span>
-                                    <span class="value">123 Main St, Iloilo City</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="info-row">
-                            <div class="info-item full-width">
-                                <i class="ri-alert-line"></i>
-                                <div>
-                                    <span class="label">Emergency Type</span>
-                                    <span class="value">Medical Emergency</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="info-row">
-                            <div class="info-item full-width">
-                                <i class="ri-file-text-line"></i>
-                                <div>
-                                    <span class="label">Description</span>
-                                    <span class="value">Person having difficulty breathing</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="responder-section">
-                            <span class="responder-label">Responder Assigned:</span>
-                            <span class="no-responder">No responder assigned yet</span>
-                        </div>
-                    </div>
-
-                    <div class="card-actions">
-                        <button class="btn btn-assign" onclick="openAssignModal('ER-A7ZX','Juan Dela Cruz','09636182369','123 Main St, Iloilo City','Medical Emergency',true,'medical')">Assign &amp; Notify</button>
-                        <button class="btn btn-view">View User Details</button>
-                    </div>
-                </div>
-
-                <!-- Emergency Card 2 -->
-                <div class="emergency-card">
-                    <div class="card-header">
-                        <div class="emergency-id">
-                            <span class="badge badge-medium">MEDIUM</span>
-                            <span class="badge badge-pending">PENDING</span>
-                            <h3>ER-C3NDP</h3>
-                        </div>
-                    </div>
-                    
-                    <div class="card-body">
-                        <div class="info-row">
-                            <div class="info-item">
-                                <i class="ri-user-line"></i>
-                                <div>
-                                    <span class="label">User Information</span>
-                                    <span class="value">Maria Santos</span>
-                                </div>
-                            </div>
-                            <div class="info-item">
-                                <i class="ri-time-line"></i>
+                    <?php endforeach; ?>
+                <?php endif; ?>
                                 <div>
                                     <span class="label">Created On</span>
                                     <span class="value">12:45:22 AM</span>

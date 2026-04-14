@@ -1,0 +1,57 @@
+.admin-wrapper { max-width: 1000px; margin: 84px auto 20px; padding: 20px; }
+.top-bar { background: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(44,62,80,0.1); border-radius: 8px; margin-bottom: 20px; }
+.banner { display: flex; align-items: center; gap: 10px; }
+.banner i { font-size: 24px; color: white; background: #1A3A52; padding: 8px; border-radius: 8px; }
+.banner-text h2 { font-size: 18px; margin: 0; } .banner-text p { font-size: 12px; margin: 0; color: #7F8C8D; }
+
+/* Settings Layout */
+.settings-layout { display: grid; grid-template-columns: 200px 1fr; gap: 20px; }
+.settings-sidebar { background: white; border: 1px solid #E0E0E0; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 4px; height: fit-content; }
+.settings-tab { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: none; background: none; border-radius: 7px; font-size: 13px; color: #555; cursor: pointer; text-align: left; transition: all 0.15s; }
+.settings-tab i { font-size: 16px; }
+.settings-tab:hover { background: #F8F9FA; }
+.settings-tab.active { background: #1A3A52; color: white; font-weight: 600; }
+.settings-content { background: white; border: 1px solid #E0E0E0; border-radius: 10px; padding: 24px; }
+.settings-panel { display: none; }
+.settings-panel.active { display: block; }
+.panel-title { font-size: 16px; font-weight: 700; color: #2C3E50; margin: 0 0 20px; padding-bottom: 12px; border-bottom: 2px solid #F0F0F0; }
+
+/* Form elements */
+.form-section { margin-bottom: 20px; }
+.form-section label { display: block; font-size: 13px; font-weight: 600; color: #2C3E50; margin-bottom: 6px; }
+.settings-input { width: 100%; padding: 9px 12px; border: 1px solid #D5D8DC; border-radius: 7px; font-size: 13px; color: #2C3E50; transition: border 0.2s; box-sizing: border-box; }
+.settings-input:focus { border-color: #1A3A52; outline: none; }
+.settings-input.sm { width: auto; flex: 1; }
+.input-hint { font-size: 11px; color: #95A5A6; margin: 4px 0 0; }
+
+/* Toggle switch */
+.toggle-row { display: flex; justify-content: space-between; align-items: center; background: #FAFAFA; border: 1px solid #E0E0E0; border-radius: 8px; padding: 14px 16px; }
+.toggle { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #BDC3C7; border-radius: 12px; transition: 0.3s; }
+.toggle-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.3s; }
+input:checked + .toggle-slider { background: #27AE60; }
+input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+/* Buttons */
+.save-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; background: #1A3A52; color: white; border: none; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
+.save-btn:hover { background: #243e56; }
+.danger-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; background: #E74C3C; color: white; border: none; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+.danger-btn:hover { background: #C0392B; }
+.icon-btn { padding: 8px 10px; border: 1px solid #E0E0E0; border-radius: 7px; background: white; cursor: pointer; font-size: 15px; }
+.icon-btn.danger { color: #E74C3C; border-color: #FDECEA; } .icon-btn.danger:hover { background: #FDECEA; }
+
+/* Hotlines */
+.hotline-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.add-hotline-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: #EAFAF1; color: #27AE60; border: 1px dashed #27AE60; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 4px; }
+
+/* Color picker */
+.color-row { display: flex; align-items: center; gap: 12px; }
+.color-picker { width: 44px; height: 36px; border: 1px solid #D5D8DC; border-radius: 7px; cursor: pointer; padding: 2px; }
+
+/* Upload area */
+.upload-area { border: 2px dashed #D5D8DC; border-radius: 8px; padding: 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px; color: #95A5A6; font-size: 13px; cursor: pointer; transition: border-color 0.2s; }
+.upload-area i { font-size: 28px; color: #BDC3C7; }
+.upload-area:hover { border-color: #1A3A52; }
+
+@media (max-width: 768px) { .settings-layout { grid-template-columns: 1fr; } .settings-sidebar { flex-direction: row; flex-wrap: wrap; } }

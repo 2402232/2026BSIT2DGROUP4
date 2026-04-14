@@ -30,6 +30,7 @@
 
                 <!-- Hidden fields -->
                 <input type="hidden" name="emergency_type" id="emergency_type" required>
+                <input type="hidden" name="severity" id="severity" value="moderate" required>
                 <input type="hidden" name="fullname" value="User Name">
                 <input type="hidden" name="contact" value="0000000000">
                 <input type="hidden" name="address" value="Auto-detected location">
@@ -37,22 +38,22 @@
                 <!-- Priority Level -->
                 <p class="priority-label">Priority level</p>
                 <div class="priority-grid">
-                    <div class="priority-box pb-critical">
+                    <button type="button" class="priority-box pb-critical selected" data-severity="critical">
                         <span class="pb-badge">CRITICAL</span>
                         <p class="pb-desc">Life-threatening emergency</p>
-                    </div>
-                    <div class="priority-box pb-high">
+                    </button>
+                    <button type="button" class="priority-box pb-high" data-severity="moderate">
                         <span class="pb-badge">HIGH PRIORITY</span>
                         <p class="pb-desc">Urgent response needed</p>
-                    </div>
-                    <div class="priority-box pb-moderate">
+                    </button>
+                    <button type="button" class="priority-box pb-moderate" data-severity="moderate">
                         <span class="pb-badge">MODERATE</span>
                         <p class="pb-desc">Important but stable</p>
-                    </div>
-                    <div class="priority-box pb-low">
+                    </button>
+                    <button type="button" class="priority-box pb-low" data-severity="minor">
                         <span class="pb-badge">LOW PRIORITY</span>
                         <p class="pb-desc">Non-urgent assistance</p>
-                    </div>
+                    </button>
                 </div>
 
                 <!-- Emergency Type -->

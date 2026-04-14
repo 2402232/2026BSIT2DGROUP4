@@ -109,6 +109,16 @@ switch ($action) {
         (new UserController())->showUsersprofile();
         break;
 
+    case 'admin-reports':
+        require_once CONTROLLER_PATH . 'AdminController.php';
+        (new AdminController())->adminReports();
+        break;
+
+    case 'admin-settings':
+        require_once CONTROLLER_PATH . 'AdminController.php';
+        (new AdminController())->adminSettings();
+        break;
+
     case 'sms-assign-responder':
         require_once CONTROLLER_PATH . 'SmsController.php';
         (new SmsController())->assignResponder();

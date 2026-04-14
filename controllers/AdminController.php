@@ -26,6 +26,8 @@ class AdminController  {
             ['action' => 'admin-dashboard','label' => 'Home'],
             ['action' => 'users', 'label' => 'Users Needing Help'],
             ['action' => 'responders', 'label' => 'Responders'],
+            ['action' => 'admin-reports', 'label' => 'Reports'],
+            ['action' => 'admin-settings', 'label' => 'Settings'],
         ];
 
         // Footer quick links
@@ -69,6 +71,26 @@ class AdminController  {
         ];
     }
 
+    /**
+     * Get all emergency reports for admin
+     */
+    private function getAllEmergencies() {
+        try {
+            $pdo = db();
+            $stmt = $pdo->prepare("
+                SELECT er.*, u.first_name, u.last_name, u.phone
+                FROM emergency_reports er
+                JOIN users u ON er.user_id = u.id
+                ORDER BY er.created_at DESC
+            ");
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            error_log("Error fetching emergencies: " . $e->getMessage());
+            return [];
+        }
+    }
+
     public function adminDashboard() {
         $pageTitle = "Admin Dashboard - BuligDiretso";
         // Sample emergency data
@@ -88,6 +110,9 @@ class AdminController  {
     public function usersNeedingHelp() {
         $pageTitle = "Users Needing Help - BuligDiretso";
 
+        // Fetch emergency reports from database
+        $emergencies = $this->getAllEmergencies();
+
         // Shared header/footer data
         extract($this->getSharedData());
 
@@ -95,10 +120,21 @@ class AdminController  {
     }
     public function responders() {
         $pageTitle = "Responders - BuligDiretso";
-
-        // Shared header/footer data
         extract($this->getSharedData());
-
         require_once VIEW_PATH . 'admin-responders.php';
     }
+
+    public function adminReports() {
+        $pageTitle = "Reports & Analytics - BuligDiretso";
+        extract($this->getSharedData());
+        require_once VIEW_PATH . 'admin-reports.php';
+    }
+
+    public function adminSettings() {
+        $pageTitle = "System Settings - BuligDiretso";
+        extract($this->getSharedData());
+        require_once VIEW_PATH . 'admin-settings.php';
+    }
 }
+
+// Note: closing brace above ends responders(). New methods added below by appending:

@@ -5,6 +5,7 @@
 // ENVIRONMENT DETECTION
 // ============================================================
 $isLocal = (
+    !isset($_SERVER['HTTP_HOST']) ||  // Command line execution
     $_SERVER['HTTP_HOST'] === 'localhost' ||
     strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false ||
     strpos($_SERVER['HTTP_HOST'], 'localhost:') !== false
