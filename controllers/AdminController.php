@@ -181,7 +181,7 @@ class AdminController  {
     public function saveChartPoints() {
         header('Content-Type: application/json');
 
-        if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? '') !== 'admin') {
+        if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] ?? '') !== 'admin') {
             echo json_encode(['success' => false, 'message' => 'Unauthorized']);
             exit();
         }
@@ -225,7 +225,7 @@ class AdminController  {
     public function saveDatasetMeta() {
         header('Content-Type: application/json');
 
-        if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? '') !== 'admin') {
+        if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] ?? '') !== 'admin') {
             echo json_encode(['success' => false, 'message' => 'Unauthorized']);
             exit();
         }
@@ -258,7 +258,7 @@ class AdminController  {
         header('Content-Type: application/json');
 
         // Must be logged-in admin
-        if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? '') !== 'admin') {
+        if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] ?? '') !== 'admin') {
             echo json_encode(['success' => false, 'message' => 'Unauthorized']);
             exit();
         }
