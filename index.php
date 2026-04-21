@@ -109,6 +109,51 @@ switch ($action) {
         (new UserController())->showUsersprofile();
         break;
 
+    case 'edit-profile':
+        require_once CONTROLLER_PATH . 'UserController.php';
+        (new UserController())->showEditProfile();
+        break;
+
+    case 'update-profile':
+        require_once CONTROLLER_PATH . 'UserController.php';
+        (new UserController())->updateProfile();
+        break;
+
+    case 'change-password':
+        require_once CONTROLLER_PATH . 'UserController.php';
+        (new UserController())->showChangePassword();
+        break;
+
+    case 'update-password':
+        require_once CONTROLLER_PATH . 'UserController.php';
+        (new UserController())->updatePassword();
+        break;
+
+    case 'verify-emergency':
+        require_once CONTROLLER_PATH . 'AdminController.php';
+        (new AdminController())->verifyEmergency();
+        break;
+
+    case 'admin-chart-data':
+        require_once CONTROLLER_PATH . 'AdminController.php';
+        (new AdminController())->adminChartData();
+        break;
+
+    case 'chart-data-json':
+        require_once CONTROLLER_PATH . 'AdminController.php';
+        (new AdminController())->chartDataJson();
+        break;
+
+    case 'save-chart-points':
+        require_once CONTROLLER_PATH . 'AdminController.php';
+        (new AdminController())->saveChartPoints();
+        break;
+
+    case 'save-dataset-meta':
+        require_once CONTROLLER_PATH . 'AdminController.php';
+        (new AdminController())->saveDatasetMeta();
+        break;
+
     case 'admin-reports':
         require_once CONTROLLER_PATH . 'AdminController.php';
         (new AdminController())->adminReports();

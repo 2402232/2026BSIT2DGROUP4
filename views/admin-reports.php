@@ -245,55 +245,94 @@
 
 </div>
 
+<a class="action-btn secondary" style="display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:7px;text-decoration:none;font-size:12px;font-weight:700;background:#1A3A52;color:#fff;margin-bottom:18px;"
+   href="<?php echo BASE_URL; ?>index.php?action=admin-chart-data">
+    <i class="ri-database-2-line"></i> Edit Chart Data
+</a>
+
 <script>
-new Chart(document.getElementById('monthlyVolume'), {
-    type: 'bar',
-    data: {
-        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-        datasets: [
-            { label: 'Medical', data: [18,22,19,25,30,28,35,32,28,24,20,18], backgroundColor: 'rgba(231,76,60,0.82)', borderRadius: 4 },
-            { label: 'Fire', data: [8,10,12,9,14,18,20,15,11,9,7,6], backgroundColor: 'rgba(243,156,18,0.82)', borderRadius: 4 },
-            { label: 'Accident', data: [5,7,6,8,10,9,12,11,8,7,6,5], backgroundColor: 'rgba(52,152,219,0.82)', borderRadius: 4 }
-        ]
-    },
-    options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { beginAtZero: true, grid: { color: '#f0f0f0' } } } }
-});
+// ── Fetch chart data from database and render ─────────────────
+const BASE_URL = '<?php echo BASE_URL; ?>';
 
-new Chart(document.getElementById('typeDistribution'), {
-    type: 'doughnut',
-    data: {
-        labels: ['Medical','Fire','Accident','Other'],
-        datasets: [{ data: [42,28,18,12], backgroundColor: ['#E74C3C','#F39C12','#3498DB','#27AE60'], borderWidth: 2, borderColor: '#fff' }]
-    },
-    options: { cutout: '65%', plugins: { legend: { display: false } } }
-});
+function fetchChart(parentKey) {
+    return fetch(BASE_URL + 'index.php?action=chart-data-json&chart=' + parentKey)
+        .then(r => r.json())
+        .catch(() => null);
+}
 
-new Chart(document.getElementById('responseTimeTrend'), {
-    type: 'line',
-    data: {
-        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-        datasets: [{ label: 'Avg Time (min)', data: [5.2,4.8,4.5,4.1,3.9,3.7,3.5,3.4,3.4,3.3,3.4,3.4], borderColor: '#E74C3C', backgroundColor: 'rgba(231,76,60,0.08)', tension: 0.4, fill: true, pointRadius: 4, pointBackgroundColor: '#E74C3C' }]
-    },
-    options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { beginAtZero: false, grid: { color: '#f0f0f0' } } } }
-});
+async function initCharts() {
+    // Monthly Volume (grouped bar)
+    const mv = await fetchChart('monthly_volume');
+    if (mv && mv.datasets.length) {
+        new Chart(document.getElementById('monthlyVolume'), {
+            type: 'bar',
+            data: { labels: mv.labels, datasets: mv.datasets.map(ds => ({ ...ds, borderRadius: 4 })) },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { beginAtZero: true, grid: { color: '#f0f0f0' } } } }
+        });
+        // Update legend dots dynamically
+        const dots = document.querySelectorAll('.chart-legend .legend-dot');
+        mv.datasets.forEach((ds, i) => { if (dots[i]) dots[i].style.background = ds.backgroundColor; });
+    }
 
-new Chart(document.getElementById('statusBreakdown'), {
-    type: 'bar',
-    data: {
-        labels: ['Resolved','Dispatched','En Route','On Scene','Pending','Cancelled'],
-        datasets: [{ data: [185,22,12,8,14,6], backgroundColor: ['#27AE60','#3498DB','#9B59B6','#F39C12','#E74C3C','#95A5A6'], borderRadius: 5 }]
-    },
-    options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, grid: { color: '#f0f0f0' } }, y: { grid: { display: false } } } }
-});
+    // Type Distribution (doughnut)
+    const td = await fetchChart('type_distribution');
+    if (td && td.datasets.length) {
+        const pts = td.datasets[0];
+        new Chart(document.getElementById('typeDistribution'), {
+            type: 'doughnut',
+            data: { labels: td.labels, datasets: [{ data: pts.data, backgroundColor: pts.backgroundColor, borderWidth: 2, borderColor: '#fff' }] },
+            options: { cutout: '65%', plugins: { legend: { display: false } } }
+        });
+        // Update legend
+        const items = document.querySelectorAll('.donut-item');
+        td.labels.forEach((lbl, i) => {
+            if (items[i]) {
+                items[i].querySelector('.donut-dot').style.background = pts.backgroundColor[i];
+                items[i].childNodes[items[i].childNodes.length - 1].textContent = lbl;
+                const strong = items[i].querySelector('strong');
+                if (strong) {
+                    const total = pts.data.reduce((a, b) => a + b, 0);
+                    strong.textContent = total ? Math.round(pts.data[i] / total * 100) + '%' : '0%';
+                }
+            }
+        });
+    }
 
-new Chart(document.getElementById('peakHours'), {
-    type: 'bar',
-    data: {
-        labels: ['6am','8am','10am','12pm','2pm','4pm','6pm','8pm','10pm','12am'],
-        datasets: [{ label: 'Emergencies', data: [3,7,10,14,18,22,28,19,12,5], backgroundColor: 'rgba(231,76,60,0.7)', borderRadius: 4 }]
-    },
-    options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { beginAtZero: true, grid: { color: '#f0f0f0' } } } }
-});
+    // Response Time Trend (line)
+    const rt = await fetchChart('response_time_trend');
+    if (rt && rt.datasets.length) {
+        const ds = rt.datasets[0];
+        new Chart(document.getElementById('responseTimeTrend'), {
+            type: 'line',
+            data: { labels: rt.labels, datasets: [{ label: ds.label, data: ds.data, borderColor: ds.borderColor, backgroundColor: ds.borderColor.replace(')', ',0.08)').replace('rgb','rgba'), tension: 0.4, fill: true, pointRadius: 4, pointBackgroundColor: ds.borderColor }] },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { beginAtZero: false, grid: { color: '#f0f0f0' } } } }
+        });
+    }
+
+    // Status Breakdown (horizontal bar)
+    const sb = await fetchChart('status_breakdown');
+    if (sb && sb.datasets.length) {
+        const ds = sb.datasets[0];
+        new Chart(document.getElementById('statusBreakdown'), {
+            type: 'bar',
+            data: { labels: sb.labels, datasets: [{ data: ds.data, backgroundColor: Array.isArray(ds.backgroundColor) ? ds.backgroundColor : sb.labels.map((_, i) => ds.backgroundColor), borderRadius: 5 }] },
+            options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, grid: { color: '#f0f0f0' } }, y: { grid: { display: false } } } }
+        });
+    }
+
+    // Peak Hours (bar)
+    const ph = await fetchChart('peak_hours');
+    if (ph && ph.datasets.length) {
+        const ds = ph.datasets[0];
+        new Chart(document.getElementById('peakHours'), {
+            type: 'bar',
+            data: { labels: ph.labels, datasets: [{ label: ds.label, data: ds.data, backgroundColor: ds.backgroundColor, borderRadius: 4 }] },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { beginAtZero: true, grid: { color: '#f0f0f0' } } } }
+        });
+    }
+}
+
+initCharts();
 </script>
 
 <?php require_once VIEW_PATH . 'includes/footer.php'; ?>

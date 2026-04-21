@@ -242,7 +242,7 @@
                 <div class="ql-icon green"><i class="ri-wheelchair-line"></i></div>
                 <div class="ql-text">
                     <span class="ql-title">Users Needing Help</span>
-                    <span class="ql-desc">Manage PWD users</span>
+                    <span class="ql-desc">Manage users</span>
                 </div>
                 <i class="ri-arrow-right-s-line ql-arrow"></i>
             </a>

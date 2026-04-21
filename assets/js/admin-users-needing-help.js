@@ -320,3 +320,79 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+// ── Emergency Verification (Real / Fake) ──────────────────────
+function verifyEmergency(reportCode, action, btn) {
+    const msg = action === 'verify'
+        ? 'Confirm this is a real emergency and move it to pending assignment?'
+        : 'Mark this as a FAKE report? This cannot be undone easily.';
+
+    if (!confirm(msg)) return;
+
+    // Disable both verify buttons while waiting
+    const verifySection = btn.closest('.verify-btns');
+    if (verifySection) {
+        verifySection.querySelectorAll('button').forEach(b => b.disabled = true);
+    }
+
+    fetch('index.php?action=verify-emergency', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'report_code=' + encodeURIComponent(reportCode)
+             + '&action='      + encodeURIComponent(action)
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+        if (!data.success) {
+            alert('Error: ' + (data.message || 'Could not update the report.'));
+            if (verifySection) {
+                verifySection.querySelectorAll('button').forEach(b => b.disabled = false);
+            }
+            return;
+        }
+
+        // Find the card and update its actions panel
+        const card       = btn.closest('.emergency-card');
+        const actionsDiv = card ? card.querySelector('.card-actions') : null;
+        if (!actionsDiv) { location.reload(); return; }
+
+        if (action === 'verify') {
+            // Replace with Assign & Notify + View buttons
+            actionsDiv.innerHTML =
+                '<button class="btn btn-assign" '
+                + 'onclick="openAssignModal(\'' + reportCode + '\',\'\',\'\',\'\',\'Emergency\',true,\'\')">'
+                + 'Assign &amp; Notify</button>'
+                + '<button class="btn btn-view">View User Details</button>';
+
+            // Update the status badge if present
+            const statusBadge = card.querySelector('.badge-pending_verification');
+            if (statusBadge) {
+                statusBadge.className = 'badge badge-pending';
+                statusBadge.textContent = 'PENDING';
+            }
+
+            showNotification('Report verified — ready for responder assignment.', 'success');
+        } else {
+            // Mark as fake
+            actionsDiv.innerHTML =
+                '<span class="fake-label">'
+                + '<i class="ri-spam-2-line"></i> Marked as Fake Report'
+                + '</span>';
+
+            const statusBadge = card.querySelector('.badge-pending_verification');
+            if (statusBadge) {
+                statusBadge.className = 'badge badge-fake';
+                statusBadge.textContent = 'FAKE';
+                statusBadge.style.background = '#6b7280';
+            }
+
+            showNotification('Report has been marked as fake.', 'info');
+        }
+    })
+    .catch(function(err) {
+        console.error('Verify emergency error:', err);
+        alert('Network error. Please try again.');
+        if (verifySection) {
+            verifySection.querySelectorAll('button').forEach(b => b.disabled = false);
+        }
+    });
+}

@@ -14,7 +14,7 @@ class AuthController extends HomeController {
         $_SESSION['user_id'] = (int) $user['id'];
         $_SESSION['user_name'] = trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? ''));
         $_SESSION['user_email'] = $user['email'] ?? '';
-        $_SESSION['user_role'] = $user['role'] ?? 'pwd';
+        $_SESSION['user_role'] = $user['role'] ?? 'users';
     }
 
     private function createRememberCookie(int $userId): void {
@@ -77,7 +77,7 @@ class AuthController extends HomeController {
             $_SESSION['user_id'] = (int)$user['id'];
             $_SESSION['user_name'] = trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? ''));
             $_SESSION['user_email'] = $user['email'] ?? '';
-            $_SESSION['user_role'] = $user['role'] ?? 'pwd';
+            $_SESSION['user_role'] = $user['role'] ?? 'users';
             return true;
         } catch (Throwable $e) {
             error_log("Auto-login cookie error: " . $e->getMessage());
@@ -88,7 +88,7 @@ class AuthController extends HomeController {
 
     public function showLogin() {
         if (!empty($_SESSION['user_id'])) {
-            $role = $_SESSION['user_role'] ?? 'pwd';
+            $role = $_SESSION['user_role'] ?? 'users';
             $target = ($role === 'admin') ? 'admin-dashboard' : 'dashboard';
             header("Location: " . BASE_URL . "index.php?action=" . $target);
             exit();
@@ -188,7 +188,7 @@ class AuthController extends HomeController {
         if (empty($address))  $errors[] = "Address is required.";
         if (empty($role))     $errors[] = "Please select a role.";
 
-        $validRoles = ['admin', 'pwd', 'responder'];
+        $validRoles = ['admin', 'users', 'responder'];
         if (!empty($role) && !in_array($role, $validRoles)) {
             $errors[] = "Invalid role selected.";
         }

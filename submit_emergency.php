@@ -29,7 +29,7 @@ try {
     $stmt = $pdo->prepare("
         INSERT INTO emergency_reports 
         (report_code, user_id, emergency_type, severity, status, description, location, created_at, updated_at) 
-        VALUES (?, ?, ?, ?, 'pending', ?, ?, NOW(), NOW())
+        VALUES (?, ?, ?, ?, 'pending_verification', ?, ?, NOW(), NOW())
     ");
 
     $stmt->execute([

@@ -12,7 +12,7 @@ USE buligdiretso;
 
 -- ============================================================
 -- 1. USERS
---    Roles: 'admin' | 'pwd' (user needing help) | 'responder'
+--    Roles: 'admin' | 'users' (regular users) | 'responder'
 -- ============================================================
 CREATE TABLE users (
     id              INT UNSIGNED    NOT NULL AUTO_INCREMENT,
@@ -22,7 +22,7 @@ CREATE TABLE users (
     phone           VARCHAR(25)     NOT NULL,
     date_of_birth   DATE            DEFAULT NULL,
     address         VARCHAR(255)    NOT NULL,
-    role            ENUM('admin','pwd','responder') NOT NULL DEFAULT 'pwd',
+    role            ENUM('admin','users','responder') NOT NULL DEFAULT 'users',
     password_hash   VARCHAR(255)    NOT NULL,
     profile_photo   VARCHAR(255)    DEFAULT NULL,
     is_active       TINYINT(1)      NOT NULL DEFAULT 1,
@@ -217,14 +217,14 @@ CREATE TABLE activity_logs (
 -- ------------------------------------------------------------
 INSERT INTO users (id, first_name, last_name, email, phone, date_of_birth, address, role, password_hash) VALUES
 (1,  'Admin',    'User',     'admin@gmail.com',        '09000000001', '1990-01-01', 'Isabela, Negros Occidental',          'admin',     '$2y$12$KIXzH3A0zVm1gRMRPuFIaOjvBJp5jFr3GWVVSnMBhbPxwPdJV4nOK'),
-(2,  'Juan',     'Dela Cruz','user@gmail.com',         '09636182369', '1995-06-15', '123 Main St, Isabela, Negros Occ.',   'pwd',       '$2y$12$ByTGxHSl4E9R7kV2Yv5eCeEW7zDdp0i4yCaWPsUmFqLg5HUOkB.iW'),
-(3,  'Maria',    'Santos',   'maria.santos@email.com', '09987654321', '1993-03-22', 'Brgy. Balud, Isabela, Negros Occ.',   'pwd',       '$2y$12$ByTGxHSl4E9R7kV2Yv5eCeEW7zDdp0i4yCaWPsUmFqLg5HUOkB.iW'),
+(2,  'Juan',     'Dela Cruz','user@gmail.com',         '09636182369', '1995-06-15', '123 Main St, Isabela, Negros Occ.',   'users',       '$2y$12$ByTGxHSl4E9R7kV2Yv5eCeEW7zDdp0i4yCaWPsUmFqLg5HUOkB.iW'),
+(3,  'Maria',    'Santos',   'maria.santos@email.com', '09987654321', '1993-03-22', 'Brgy. Balud, Isabela, Negros Occ.',   'users',       '$2y$12$ByTGxHSl4E9R7kV2Yv5eCeEW7zDdp0i4yCaWPsUmFqLg5HUOkB.iW'),
 (4,  'John',     'Santoso',  'john.santoso@email.com', '09171112233', '1988-09-10', 'Brgy. Balud, Isabela, Negros Occ.',   'responder', '$2y$12$QpLvLMz6Nk8r2jT5qXbB7.HZ4cXkFDp5G3sOT7MkiK6Dm9Z3REqsO'),
 (5,  'Mario',    'Reyes',    'mario.reyes@email.com',  '09229998877', '1985-12-05', 'Brgy. Cabcab, Isabela, Negros Occ.', 'responder', '$2y$12$QpLvLMz6Nk8r2jT5qXbB7.HZ4cXkFDp5G3sOT7MkiK6Dm9Z3REqsO'),
 (6,  'Kim',      'Taehyung', 'kim.taehyung@email.com', '09331234567', '1997-02-14', 'Isabela, Negros Occidental',          'responder', '$2y$12$QpLvLMz6Nk8r2jT5qXbB7.HZ4cXkFDp5G3sOT7MkiK6Dm9Z3REqsO'),
 (7,  'Janelle',  'Ba-al',    'janelle.baal@email.com', '09441234567', '1996-07-21', 'Brgy. Puso, Isabela, Negros Occ.',   'responder', '$2y$12$QpLvLMz6Nk8r2jT5qXbB7.HZ4cXkFDp5G3sOT7MkiK6Dm9Z3REqsO'),
 (8,  'Jeon',     'Jungkook', 'jeon.jungkook@email.com','09551234567', '1997-09-01', 'Brgy. Quintin Remo, Isabela, Neg.',  'responder', '$2y$12$QpLvLMz6Nk8r2jT5qXbB7.HZ4cXkFDp5G3sOT7MkiK6Dm9Z3REqsO'),
-(9,  'Carlos',   'Mendoza',  'carlos.mendoza@email.com','09661112233','1992-04-30', '123 Main St, Isabela, Negros Occ.',  'pwd',       '$2y$12$ByTGxHSl4E9R7kV2Yv5eCeEW7zDdp0i4yCaWPsUmFqLg5HUOkB.iW');
+(9,  'Carlos',   'Mendoza',  'carlos.mendoza@email.com','09661112233','1992-04-30', '123 Main St, Isabela, Negros Occ.',  'users',       '$2y$12$ByTGxHSl4E9R7kV2Yv5eCeEW7zDdp0i4yCaWPsUmFqLg5HUOkB.iW');
 
 -- ------------------------------------------------------------
 -- Responders (one row per responder user)
@@ -316,3 +316,183 @@ INSERT INTO activity_logs (user_id, action, target_type, target_id, details, ip_
 (3, 'report_submitted',     'emergency', 3,    'Emergency ER-C9KL submitted (accident/critical)','192.168.1.30'),
 (2, 'report_submitted',     'emergency', 4,    'Emergency ER-D2MN submitted (medical/low)',   '192.168.1.10'),
 (1, 'emergency_resolved',   'emergency', 4,    'Emergency ER-D2MN marked as resolved',        '127.0.0.1');
+
+-- ============================================================
+-- MIGRATION: emergency_reports table (used by submit_emergency.php
+--            and AdminController — separate from the older `emergencies` table)
+-- Run this if you do not already have this table.
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS emergency_reports (
+    id              INT UNSIGNED    NOT NULL AUTO_INCREMENT,
+    report_code     VARCHAR(20)     NOT NULL UNIQUE,            -- e.g. ER-A3F7K2
+    user_id         INT UNSIGNED    NOT NULL,
+    emergency_type  VARCHAR(50)     NOT NULL,                   -- medical, fire, accident …
+    severity        ENUM('minor','moderate','high','critical')  NOT NULL DEFAULT 'moderate',
+    status          ENUM(
+                        'pending_verification',   -- NEW: awaiting admin confirmation
+                        'fake',                   -- NEW: admin marked as fake
+                        'pending',                -- verified & waiting for responder
+                        'dispatched',
+                        'en_route',
+                        'on_scene',
+                        'resolved',
+                        'cancelled'
+                    )               NOT NULL DEFAULT 'pending_verification',
+    description     TEXT            DEFAULT NULL,
+    location        VARCHAR(255)    NOT NULL DEFAULT 'Unknown',
+    latitude        DECIMAL(10,7)   DEFAULT NULL,
+    longitude       DECIMAL(10,7)   DEFAULT NULL,
+    created_at      DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (id),
+    INDEX idx_er_user   (user_id),
+    INDEX idx_er_status (status),
+    CONSTRAINT fk_er_user
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- If emergency_reports already exists, run this ALTER to add the new statuses:
+-- ALTER TABLE emergency_reports
+--   MODIFY COLUMN status ENUM(
+--       'pending_verification','fake',
+--       'pending','dispatched','en_route','on_scene','resolved','cancelled'
+--   ) NOT NULL DEFAULT 'pending_verification';
+
+-- ============================================================
+-- CHART DATA TABLES
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS chart_datasets (
+    id              INT UNSIGNED    NOT NULL AUTO_INCREMENT,
+    chart_key       VARCHAR(60)     NOT NULL UNIQUE,   -- machine key, e.g. 'monthly_medical'
+    parent_chart    VARCHAR(60)     NOT NULL,          -- groups datasets into one chart, e.g. 'monthly_volume'
+    chart_name      VARCHAR(120)    NOT NULL,          -- human name of the whole chart
+    dataset_label   VARCHAR(80)     NOT NULL,          -- series label, e.g. 'Medical'
+    chart_type      ENUM('bar','line','doughnut','pie') NOT NULL DEFAULT 'bar',
+    color           VARCHAR(25)     NOT NULL DEFAULT '#E74C3C',
+    display_order   TINYINT         NOT NULL DEFAULT 0,
+    created_at      DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    INDEX idx_cd_parent (parent_chart)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS chart_data_points (
+    id              INT UNSIGNED    NOT NULL AUTO_INCREMENT,
+    dataset_id      INT UNSIGNED    NOT NULL,
+    label           VARCHAR(80)     NOT NULL,           -- x-axis label: 'Jan', 'Medical', '6am' …
+    value           DECIMAL(10,2)   NOT NULL DEFAULT 0,
+    point_color     VARCHAR(25)     DEFAULT NULL,       -- per-point color for doughnut slices
+    display_order   TINYINT         NOT NULL DEFAULT 0,
+    updated_at      DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    INDEX idx_cdp_dataset (dataset_id),
+    CONSTRAINT fk_cdp_dataset
+        FOREIGN KEY (dataset_id) REFERENCES chart_datasets(id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- ============================================================
+-- SEED CHART DATASETS  (mirrors the hardcoded data in admin-reports.php)
+-- ============================================================
+
+INSERT INTO chart_datasets (chart_key, parent_chart, chart_name, dataset_label, chart_type, color, display_order) VALUES
+-- Monthly Volume (grouped bar)
+('monthly_medical',  'monthly_volume', 'Monthly Emergency Volume', 'Medical',  'bar', 'rgba(231,76,60,0.82)',  0),
+('monthly_fire',     'monthly_volume', 'Monthly Emergency Volume', 'Fire',     'bar', 'rgba(243,156,18,0.82)', 1),
+('monthly_accident', 'monthly_volume', 'Monthly Emergency Volume', 'Accident', 'bar', 'rgba(52,152,219,0.82)', 2),
+-- Type Distribution (doughnut)
+('type_dist', 'type_distribution', 'Type Distribution', 'Distribution', 'doughnut', '#E74C3C', 0),
+-- Response Time Trend (line)
+('response_time', 'response_time_trend', 'Response Time Trend', 'Avg Time (min)', 'line', '#E74C3C', 0),
+-- Status Breakdown (horizontal bar)
+('status_breakdown', 'status_breakdown', 'Status Breakdown', 'Count', 'bar', '#27AE60', 0),
+-- Peak Hours (bar)
+('peak_hours', 'peak_hours', 'Peak Hours', 'Emergencies', 'bar', 'rgba(231,76,60,0.7)', 0);
+
+
+-- Monthly Medical
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Jan',18,0  FROM chart_datasets WHERE chart_key='monthly_medical';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Feb',22,1  FROM chart_datasets WHERE chart_key='monthly_medical';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Mar',19,2  FROM chart_datasets WHERE chart_key='monthly_medical';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Apr',25,3  FROM chart_datasets WHERE chart_key='monthly_medical';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'May',30,4  FROM chart_datasets WHERE chart_key='monthly_medical';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Jun',28,5  FROM chart_datasets WHERE chart_key='monthly_medical';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Jul',35,6  FROM chart_datasets WHERE chart_key='monthly_medical';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Aug',32,7  FROM chart_datasets WHERE chart_key='monthly_medical';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Sep',28,8  FROM chart_datasets WHERE chart_key='monthly_medical';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Oct',24,9  FROM chart_datasets WHERE chart_key='monthly_medical';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Nov',20,10 FROM chart_datasets WHERE chart_key='monthly_medical';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Dec',18,11 FROM chart_datasets WHERE chart_key='monthly_medical';
+
+-- Monthly Fire
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Jan',8,0  FROM chart_datasets WHERE chart_key='monthly_fire';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Feb',10,1 FROM chart_datasets WHERE chart_key='monthly_fire';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Mar',12,2 FROM chart_datasets WHERE chart_key='monthly_fire';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Apr',9,3  FROM chart_datasets WHERE chart_key='monthly_fire';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'May',14,4 FROM chart_datasets WHERE chart_key='monthly_fire';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Jun',18,5 FROM chart_datasets WHERE chart_key='monthly_fire';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Jul',20,6 FROM chart_datasets WHERE chart_key='monthly_fire';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Aug',15,7 FROM chart_datasets WHERE chart_key='monthly_fire';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Sep',11,8 FROM chart_datasets WHERE chart_key='monthly_fire';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Oct',9,9  FROM chart_datasets WHERE chart_key='monthly_fire';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Nov',7,10 FROM chart_datasets WHERE chart_key='monthly_fire';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Dec',6,11 FROM chart_datasets WHERE chart_key='monthly_fire';
+
+-- Monthly Accident
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Jan',5,0  FROM chart_datasets WHERE chart_key='monthly_accident';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Feb',7,1  FROM chart_datasets WHERE chart_key='monthly_accident';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Mar',6,2  FROM chart_datasets WHERE chart_key='monthly_accident';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Apr',8,3  FROM chart_datasets WHERE chart_key='monthly_accident';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'May',10,4 FROM chart_datasets WHERE chart_key='monthly_accident';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Jun',9,5  FROM chart_datasets WHERE chart_key='monthly_accident';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Jul',12,6 FROM chart_datasets WHERE chart_key='monthly_accident';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Aug',11,7 FROM chart_datasets WHERE chart_key='monthly_accident';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Sep',8,8  FROM chart_datasets WHERE chart_key='monthly_accident';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Oct',7,9  FROM chart_datasets WHERE chart_key='monthly_accident';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Nov',6,10 FROM chart_datasets WHERE chart_key='monthly_accident';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Dec',5,11 FROM chart_datasets WHERE chart_key='monthly_accident';
+
+-- Type Distribution
+INSERT INTO chart_data_points (dataset_id, label, value, point_color, display_order) SELECT id, 'Medical',42,'#E74C3C',0 FROM chart_datasets WHERE chart_key='type_dist';
+INSERT INTO chart_data_points (dataset_id, label, value, point_color, display_order) SELECT id, 'Fire',28,'#F39C12',1    FROM chart_datasets WHERE chart_key='type_dist';
+INSERT INTO chart_data_points (dataset_id, label, value, point_color, display_order) SELECT id, 'Accident',18,'#3498DB',2 FROM chart_datasets WHERE chart_key='type_dist';
+INSERT INTO chart_data_points (dataset_id, label, value, point_color, display_order) SELECT id, 'Other',12,'#27AE60',3   FROM chart_datasets WHERE chart_key='type_dist';
+
+-- Response Time Trend
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Jan',5.2,0  FROM chart_datasets WHERE chart_key='response_time';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Feb',4.8,1  FROM chart_datasets WHERE chart_key='response_time';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Mar',4.5,2  FROM chart_datasets WHERE chart_key='response_time';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Apr',4.1,3  FROM chart_datasets WHERE chart_key='response_time';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'May',3.9,4  FROM chart_datasets WHERE chart_key='response_time';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Jun',3.7,5  FROM chart_datasets WHERE chart_key='response_time';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Jul',3.5,6  FROM chart_datasets WHERE chart_key='response_time';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Aug',3.4,7  FROM chart_datasets WHERE chart_key='response_time';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Sep',3.4,8  FROM chart_datasets WHERE chart_key='response_time';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Oct',3.3,9  FROM chart_datasets WHERE chart_key='response_time';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Nov',3.4,10 FROM chart_datasets WHERE chart_key='response_time';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, 'Dec',3.4,11 FROM chart_datasets WHERE chart_key='response_time';
+
+-- Status Breakdown
+INSERT INTO chart_data_points (dataset_id, label, value, point_color, display_order) SELECT id, 'Resolved',185,'#27AE60',0   FROM chart_datasets WHERE chart_key='status_breakdown';
+INSERT INTO chart_data_points (dataset_id, label, value, point_color, display_order) SELECT id, 'Dispatched',22,'#3498DB',1  FROM chart_datasets WHERE chart_key='status_breakdown';
+INSERT INTO chart_data_points (dataset_id, label, value, point_color, display_order) SELECT id, 'En Route',12,'#9B59B6',2    FROM chart_datasets WHERE chart_key='status_breakdown';
+INSERT INTO chart_data_points (dataset_id, label, value, point_color, display_order) SELECT id, 'On Scene',8,'#F39C12',3     FROM chart_datasets WHERE chart_key='status_breakdown';
+INSERT INTO chart_data_points (dataset_id, label, value, point_color, display_order) SELECT id, 'Pending',14,'#E74C3C',4     FROM chart_datasets WHERE chart_key='status_breakdown';
+INSERT INTO chart_data_points (dataset_id, label, value, point_color, display_order) SELECT id, 'Cancelled',6,'#95A5A6',5    FROM chart_datasets WHERE chart_key='status_breakdown';
+
+-- Peak Hours
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, '6am',3,0   FROM chart_datasets WHERE chart_key='peak_hours';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, '8am',7,1   FROM chart_datasets WHERE chart_key='peak_hours';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, '10am',10,2 FROM chart_datasets WHERE chart_key='peak_hours';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, '12pm',14,3 FROM chart_datasets WHERE chart_key='peak_hours';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, '2pm',18,4  FROM chart_datasets WHERE chart_key='peak_hours';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, '4pm',22,5  FROM chart_datasets WHERE chart_key='peak_hours';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, '6pm',28,6  FROM chart_datasets WHERE chart_key='peak_hours';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, '8pm',19,7  FROM chart_datasets WHERE chart_key='peak_hours';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, '10pm',12,8 FROM chart_datasets WHERE chart_key='peak_hours';
+INSERT INTO chart_data_points (dataset_id, label, value, display_order) SELECT id, '12am',5,9  FROM chart_datasets WHERE chart_key='peak_hours';

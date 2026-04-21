@@ -14,7 +14,7 @@
              </div>
              
              <div class="banner-icon">
-                <i class="ri-group-fill"></i>
+                <a href="index.php?action=users-profile"><i class="ri-group-fill"></i></a>
                 <i class="ri-pulse-line"></i>
              </div>
          

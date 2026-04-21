@@ -52,9 +52,13 @@
                                     <span class="badge badge-<?php echo strtolower($emergency['severity']); ?>">
                                         <?php echo strtoupper($emergency['severity']); ?>
                                     </span>
-                                    <span class="badge badge-<?php echo $emergency['status']; ?>">
-                                        <?php echo strtoupper($emergency['status']); ?>
-                                    </span>
+                                    <?php if ($emergency['status'] === 'pending_verification'): ?>
+                                        <span class="badge badge-pending_verification">NEEDS VERIFICATION</span>
+                                    <?php else: ?>
+                                        <span class="badge badge-<?php echo strtolower($emergency['status']); ?>">
+                                            <?php echo strtoupper($emergency['status']); ?>
+                                        </span>
+                                    <?php endif; ?>
                                     <h3><?php echo htmlspecialchars($emergency['report_code']); ?></h3>
                                 </div>
                             </div>
@@ -130,9 +134,27 @@
                                 </div>
                             </div>
 
-                            <div class="card-actions">
-                                <button class="btn btn-assign" onclick="openAssignModal('<?php echo $emergency['report_code']; ?>','<?php echo htmlspecialchars($emergency['first_name'] . ' ' . $emergency['last_name']); ?>','<?php echo htmlspecialchars($emergency['phone']); ?>','<?php echo htmlspecialchars($emergency['location']); ?>','<?php echo htmlspecialchars($emergency['emergency_type']); ?> Emergency',true,'<?php echo strtolower($emergency['emergency_type']); ?>')">Assign &amp; Notify</button>
-                                <button class="btn btn-view">View User Details</button>
+                            <div class="card-actions" data-report="<?php echo htmlspecialchars($emergency['report_code']); ?>" data-status="<?php echo htmlspecialchars($emergency['status']); ?>">
+                                <?php if ($emergency['status'] === 'pending_verification'): ?>
+                                    <div class="verify-section">
+                                        <p class="verify-prompt"><i class="ri-question-line"></i> Is this a real emergency?</p>
+                                        <div class="verify-btns">
+                                            <button class="btn btn-real"
+                                                onclick="verifyEmergency('<?php echo htmlspecialchars($emergency['report_code']); ?>', 'verify', this)">
+                                                <i class="ri-checkbox-circle-line"></i> Confirm Real
+                                            </button>
+                                            <button class="btn btn-fake"
+                                                onclick="verifyEmergency('<?php echo htmlspecialchars($emergency['report_code']); ?>', 'fake', this)">
+                                                <i class="ri-close-circle-line"></i> Mark as Fake
+                                            </button>
+                                        </div>
+                                    </div>
+                                <?php elseif ($emergency['status'] === 'fake'): ?>
+                                    <span class="fake-label"><i class="ri-spam-2-line"></i> Marked as Fake Report</span>
+                                <?php else: ?>
+                                    <button class="btn btn-assign" onclick="openAssignModal('<?php echo $emergency['report_code']; ?>','<?php echo htmlspecialchars($emergency['first_name'] . ' ' . $emergency['last_name']); ?>','<?php echo htmlspecialchars($emergency['phone']); ?>','<?php echo htmlspecialchars($emergency['location']); ?>','<?php echo htmlspecialchars($emergency['emergency_type']); ?> Emergency',true,'<?php echo strtolower($emergency['emergency_type']); ?>')">Assign &amp; Notify</button>
+                                    <button class="btn btn-view">View User Details</button>
+                                <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>

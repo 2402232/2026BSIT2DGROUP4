@@ -230,5 +230,161 @@ class UserController {
         require_once VIEW_PATH . 'contact.php';
     }
 
+    /**
+     * Show Edit Profile form
+     */
+    public function showEditProfile() {
+        $this->requireLogin();
+        $pageTitle = "Edit Profile - BuligDiretso";
+
+        $user = User::findById((int) $_SESSION['user_id']);
+        if (!$user) {
+            $_SESSION['error'] = "User not found.";
+            header("Location: " . BASE_URL . "index.php?action=users-profile");
+            exit();
+        }
+        $user['profile_picture'] = !empty($user['profile_photo'])
+            ? (BASE_URL . $user['profile_photo'])
+            : (ASSETS_PATH . 'images/default-avatar.png');
+
+        extract($this->getSharedData());
+        require_once VIEW_PATH . 'edit-profile.php';
+    }
+
+    /**
+     * Handle Edit Profile form submission
+     */
+    public function updateProfile() {
+        $this->requireLogin();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: " . BASE_URL . "index.php?action=edit-profile");
+            exit();
+        }
+
+        $user_id    = (int) $_SESSION['user_id'];
+        $first_name = trim($_POST['first_name'] ?? '');
+        $last_name  = trim($_POST['last_name']  ?? '');
+        $phone      = trim($_POST['phone']       ?? '');
+        $address    = trim($_POST['address']     ?? '');
+        $dob        = trim($_POST['date_of_birth'] ?? '');
+
+        if (!$first_name || !$last_name) {
+            $_SESSION['error'] = "First name and last name are required.";
+            header("Location: " . BASE_URL . "index.php?action=edit-profile");
+            exit();
+        }
+
+        // Handle profile picture upload
+        $profile_photo = null;
+        if (!empty($_FILES['profile_photo']['tmp_name'])) {
+            $file     = $_FILES['profile_photo'];
+            $ext      = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            $allowed  = ['jpg','jpeg','png','gif','webp'];
+
+            if (!in_array($ext, $allowed)) {
+                $_SESSION['error'] = "Only image files (JPG, PNG, GIF, WEBP) are allowed.";
+                header("Location: " . BASE_URL . "index.php?action=edit-profile");
+                exit();
+            }
+            if ($file['size'] > 5 * 1024 * 1024) {
+                $_SESSION['error'] = "Profile picture must be under 5 MB.";
+                header("Location: " . BASE_URL . "index.php?action=edit-profile");
+                exit();
+            }
+
+            $upload_dir = __DIR__ . '/../uploads/profile_pictures/';
+            if (!is_dir($upload_dir)) mkdir($upload_dir, 0755, true);
+            $filename     = uniqid() . '_' . uniqid() . '.' . $ext;
+            $dest         = $upload_dir . $filename;
+            if (move_uploaded_file($file['tmp_name'], $dest)) {
+                $profile_photo = 'uploads/profile_pictures/' . $filename;
+            }
+        }
+
+        $ok = User::updateProfile($user_id, [
+            'first_name'    => $first_name,
+            'last_name'     => $last_name,
+            'phone'         => $phone,
+            'address'       => $address,
+            'date_of_birth' => $dob ?: null,
+            'profile_photo' => $profile_photo,
+        ]);
+
+        if ($ok) {
+            // Refresh session name
+            $_SESSION['first_name'] = $first_name;
+            $_SESSION['last_name']  = $last_name;
+            $_SESSION['success']    = "Profile updated successfully!";
+        } else {
+            $_SESSION['error'] = "Failed to update profile. Please try again.";
+        }
+
+        header("Location: " . BASE_URL . "index.php?action=users-profile");
+        exit();
+    }
+
+    /**
+     * Show Change Password form
+     */
+    public function showChangePassword() {
+        $this->requireLogin();
+        $pageTitle = "Change Password - BuligDiretso";
+        extract($this->getSharedData());
+        require_once VIEW_PATH . 'change-password.php';
+    }
+
+    /**
+     * Handle Change Password form submission
+     */
+    public function updatePassword() {
+        $this->requireLogin();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: " . BASE_URL . "index.php?action=change-password");
+            exit();
+        }
+
+        $user_id      = (int) $_SESSION['user_id'];
+        $current_pw   = $_POST['current_password']  ?? '';
+        $new_pw       = $_POST['new_password']       ?? '';
+        $confirm_pw   = $_POST['confirm_password']   ?? '';
+
+        if (!$current_pw || !$new_pw || !$confirm_pw) {
+            $_SESSION['error'] = "All password fields are required.";
+            header("Location: " . BASE_URL . "index.php?action=change-password");
+            exit();
+        }
+        if ($new_pw !== $confirm_pw) {
+            $_SESSION['error'] = "New password and confirmation do not match.";
+            header("Location: " . BASE_URL . "index.php?action=change-password");
+            exit();
+        }
+        if (strlen($new_pw) < 8) {
+            $_SESSION['error'] = "New password must be at least 8 characters.";
+            header("Location: " . BASE_URL . "index.php?action=change-password");
+            exit();
+        }
+
+        $user = User::findById($user_id);
+        if (!$user || !password_verify($current_pw, $user['password_hash'])) {
+            $_SESSION['error'] = "Current password is incorrect.";
+            header("Location: " . BASE_URL . "index.php?action=change-password");
+            exit();
+        }
+
+        $new_hash = password_hash($new_pw, PASSWORD_BCRYPT);
+        $ok = User::updatePassword($user_id, $new_hash);
+
+        if ($ok) {
+            $_SESSION['success'] = "Password changed successfully!";
+            header("Location: " . BASE_URL . "index.php?action=users-profile");
+        } else {
+            $_SESSION['error'] = "Failed to change password. Please try again.";
+            header("Location: " . BASE_URL . "index.php?action=change-password");
+        }
+        exit();
+    }
+
     // End of UserController class
 }

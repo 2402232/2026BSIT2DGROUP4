@@ -83,7 +83,7 @@
                 <label for="role">Role</label>
                 <select id="role" name="role" class="input-group" required>
                     <option value="" disabled <?php echo empty($old['role']) ? 'selected' : ''; ?>>Select Role</option>
-                    <option value="pwd"   <?php echo (($old['role'] ?? '') === 'pwd')   ? 'selected' : ''; ?>>User</option>
+                    <option value="users"   <?php echo (($old['role'] ?? '') === 'users')   ? 'selected' : ''; ?>>Users</option>
                     <option value="responder" <?php echo (($old['role'] ?? '') === 'responder') ? 'selected' : ''; ?>>Responder</option>
                     <option value="admin" <?php echo (($old['role'] ?? '') === 'admin') ? 'selected' : ''; ?>>Administrator</option>
                 </select>

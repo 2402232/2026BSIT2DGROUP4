@@ -9,7 +9,22 @@ $profile_picture = $user['profile_picture'] ?? (ASSETS_PATH . 'images/default-av
 ?>
 
 <?php require_once VIEW_PATH . 'includes/header.php'; ?>
-<link rel="stylesheet" href="<?php echo ASSETS_PATH . 'css/emergency-tracking.css'; ?>">
+<link rel="stylesheet" href="<?php echo ASSETS_PATH . 'css/users-profile.css'; ?>">
+
+<?php if (!empty($_SESSION['success'])): ?>
+    <div style="max-width:700px;margin:90px auto 0;padding:0 20px;">
+        <div style="background:#dcfce7;color:#166534;border:1px solid #86efac;border-radius:8px;padding:12px 18px;font-size:14px;font-weight:600;">
+            ✅ <?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
+        </div>
+    </div>
+<?php endif; ?>
+<?php if (!empty($_SESSION['error'])): ?>
+    <div style="max-width:700px;margin:90px auto 0;padding:0 20px;">
+        <div style="background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;border-radius:8px;padding:12px 18px;font-size:14px;font-weight:600;">
+            ❌ <?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
+        </div>
+    </div>
+<?php endif; ?>
 
 <div class="profile-wrapper">
 

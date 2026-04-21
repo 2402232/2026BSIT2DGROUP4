@@ -78,7 +78,7 @@ class User {
             $data['phone'] ?? '',
             ($data['date_of_birth'] ?? $data['dob'] ?? null) ?: null,
             $data['address'] ?? '',
-            $data['role'] ?? 'pwd',
+            $data['role'] ?? 'users',
             $data['password_hash'] ?? '',
         ]);
         return $ok ? (int) $pdo->lastInsertId() : false;
@@ -126,5 +126,52 @@ class User {
             error_log("Login verification error: " . $e->getMessage());
             return null;
         }
+    }
+
+    /**
+     * Update user profile fields.
+     * profile_photo is only updated when a new value is provided.
+     */
+    public static function updateProfile(int $id, array $data): bool {
+        $pdo       = db();
+        $dobColumn = self::getDobColumn();
+
+        $setClauses = [
+            "first_name  = ?",
+            "last_name   = ?",
+            "phone       = ?",
+            "address     = ?",
+            "{$dobColumn} = ?",
+            "updated_at  = NOW()",
+        ];
+        $params = [
+            $data['first_name']     ?? '',
+            $data['last_name']      ?? '',
+            $data['phone']          ?? '',
+            $data['address']        ?? '',
+            ($data['date_of_birth'] ?: null),
+        ];
+
+        // Only overwrite photo column when a new file was uploaded
+        if (!empty($data['profile_photo'])) {
+            $setClauses[] = "profile_photo = ?";
+            $params[]     = $data['profile_photo'];
+        }
+
+        $params[] = $id;
+        $sql  = "UPDATE users SET " . implode(', ', $setClauses) . " WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        return $stmt->execute($params);
+    }
+
+    /**
+     * Update a user's password hash.
+     */
+    public static function updatePassword(int $id, string $password_hash): bool {
+        $pdo  = db();
+        $stmt = $pdo->prepare(
+            "UPDATE users SET password_hash = ?, updated_at = NOW() WHERE id = ?"
+        );
+        return $stmt->execute([$password_hash, $id]);
     }
 }

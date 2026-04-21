@@ -1,0 +1,233 @@
+/* ── edit-profile.css — shared by edit-profile & change-password ── */
+
+/* Flash messages */
+.flash {
+    max-width: 700px;
+    margin: 90px auto 0;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+.flash-error   { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.flash-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+
+/* Editing hint under avatar */
+.ep-hint {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Icon for change-password header */
+.ep-icon-wrap {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e63946, #c1121f);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    color: #fff;
+    font-size: 30px;
+    box-shadow: 0 4px 14px rgba(193,18,31,.35);
+}
+
+/* Edit form grid */
+.edit-grid {
+    gap: 18px;
+}
+
+.edit-field label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 6px;
+}
+.edit-field label .req { color: #e63946; }
+
+.edit-field input {
+    width: 100%;
+    padding: 10px 13px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1f2937;
+    background: #fff;
+    transition: border-color .2s, box-shadow .2s;
+    box-sizing: border-box;
+}
+
+.edit-field input:focus {
+    outline: none;
+    border-color: #e63946;
+    box-shadow: 0 0 0 3px rgba(230,57,70,.1);
+}
+
+.edit-field input.field-disabled {
+    background: #f9fafb;
+    color: #9ca3af;
+    cursor: not-allowed;
+    border-color: #e5e7eb;
+}
+
+.field-note {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    color: #9ca3af;
+}
+
+.full-span {
+    grid-column: 1 / -1;
+}
+
+/* Photo preview notice */
+.photo-preview-note {
+    font-size: 13px;
+    color: #16a34a;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 0 0 16px;
+}
+
+/* Cancel button */
+.btn-cancel {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 22px;
+    border-radius: 8px;
+    background: #f3f4f6;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background .2s;
+    border: 1.5px solid #e5e7eb;
+    cursor: pointer;
+}
+.btn-cancel:hover { background: #e5e7eb; }
+
+/* ── Change Password specific ────────────────────────────────── */
+.cp-grid {
+    grid-template-columns: 1fr 1fr;
+}
+
+/* Password input wrapper (input + eye button) */
+.pw-wrap {
+    position: relative;
+}
+.pw-wrap input {
+    padding-right: 42px;
+}
+.pw-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+    line-height: 1;
+    transition: color .2s;
+}
+.pw-toggle:hover { color: #e63946; }
+
+/* Strength bar */
+.strength-bar-wrap {
+    height: 5px;
+    background: #e5e7eb;
+    border-radius: 99px;
+    margin-top: 6px;
+    overflow: hidden;
+}
+.strength-bar {
+    height: 100%;
+    border-radius: 99px;
+    width: 0;
+    transition: width .3s, background .3s;
+}
+.strength-bar.str-weak  { background: #ef4444; }
+.strength-bar.str-fair  { background: #f97316; }
+.strength-bar.str-good  { background: #eab308; }
+.strength-bar.str-great { background: #22c55e; }
+
+.strength-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #6b7280;
+    margin-top: 2px;
+    display: block;
+}
+
+/* Match label */
+.match-label { font-size: 12px; margin-top: 4px; display: block; font-weight: 600; }
+.match-ok    { color: #16a34a; }
+.match-fail  { color: #dc2626; }
+
+/* Password requirements list */
+.pw-requirements {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 18px;
+}
+.pw-requirements p {
+    margin: 0 0 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.pw-requirements ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.req-item {
+    font-size: 12px;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color .2s;
+}
+.req-item.req-met  { color: #16a34a; }
+.req-item.req-fail { color: #ef4444; }
+.req-item i { font-size: 14px; }
+
+/* Disabled save button */
+.btn-password-save:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 600px) {
+    .cp-grid { grid-template-columns: 1fr; }
+    .full-span { grid-column: 1; }
+}

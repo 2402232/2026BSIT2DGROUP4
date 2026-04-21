@@ -27,6 +27,7 @@ class AdminController  {
             ['action' => 'users', 'label' => 'Users Needing Help'],
             ['action' => 'responders', 'label' => 'Responders'],
             ['action' => 'admin-reports', 'label' => 'Reports'],
+            ['action' => 'admin-chart-data', 'label' => 'Chart Data'],
             ['action' => 'admin-settings', 'label' => 'Settings'],
         ];
 
@@ -135,6 +136,159 @@ class AdminController  {
         extract($this->getSharedData());
         require_once VIEW_PATH . 'admin-settings.php';
     }
-}
 
-// Note: closing brace above ends responders(). New methods added below by appending:
+    /**
+     * Admin Chart Data editor page
+     */
+    public function adminChartData() {
+        $pageTitle = "Chart Data Editor - BuligDiretso";
+        require_once MODEL_PATH . 'chart_data.php';
+
+        $grouped = ChartData::getDatasetsGrouped();
+
+        // Attach points to each dataset
+        foreach ($grouped as $chartKey => $datasets) {
+            foreach ($datasets as &$ds) {
+                $ds['points'] = ChartData::getPoints((int)$ds['id']);
+            }
+            $grouped[$chartKey] = $datasets;
+        }
+
+        extract($this->getSharedData());
+        require_once VIEW_PATH . 'admin-chart-data.php';
+    }
+
+    /**
+     * JSON API — returns Chart.js-ready data for a parent_chart key.
+     * GET ?action=chart-data-json&chart=monthly_volume
+     */
+    public function chartDataJson() {
+        header('Content-Type: application/json');
+        require_once MODEL_PATH . 'chart_data.php';
+        $chart = trim($_GET['chart'] ?? '');
+        if (!$chart) {
+            echo json_encode(['error' => 'Missing chart parameter']);
+            exit();
+        }
+        echo json_encode(ChartData::getChartJs($chart));
+        exit();
+    }
+
+    /**
+     * AJAX — save (replace) all data points for a dataset.
+     * POST: dataset_id, rows (JSON array of {label, value, point_color})
+     */
+    public function saveChartPoints() {
+        header('Content-Type: application/json');
+
+        if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? '') !== 'admin') {
+            echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+            exit();
+        }
+
+        require_once MODEL_PATH . 'chart_data.php';
+
+        $dataset_id = (int)($_POST['dataset_id'] ?? 0);
+        $rows_json  = $_POST['rows'] ?? '[]';
+
+        if (!$dataset_id) {
+            echo json_encode(['success' => false, 'message' => 'Invalid dataset_id']);
+            exit();
+        }
+
+        $rows = json_decode($rows_json, true);
+        if (!is_array($rows)) {
+            echo json_encode(['success' => false, 'message' => 'Invalid rows JSON']);
+            exit();
+        }
+
+        // Basic sanitisation
+        $clean = [];
+        foreach ($rows as $row) {
+            $label = trim($row['label'] ?? '');
+            if ($label === '') continue;
+            $clean[] = [
+                'label'       => $label,
+                'value'       => (float)($row['value'] ?? 0),
+                'point_color' => !empty($row['point_color']) ? $row['point_color'] : null,
+            ];
+        }
+
+        $ok = ChartData::replacePoints($dataset_id, $clean);
+        echo json_encode(['success' => $ok]);
+        exit();
+    }
+
+    /**
+     * AJAX — update dataset meta (label, color, chart_type).
+     */
+    public function saveDatasetMeta() {
+        header('Content-Type: application/json');
+
+        if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? '') !== 'admin') {
+            echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+            exit();
+        }
+
+        require_once MODEL_PATH . 'chart_data.php';
+
+        $id             = (int)($_POST['id'] ?? 0);
+        $dataset_label  = trim($_POST['dataset_label'] ?? '');
+        $color          = trim($_POST['color'] ?? '#E74C3C');
+        $chart_type     = trim($_POST['chart_type'] ?? 'bar');
+
+        if (!$id || !$dataset_label) {
+            echo json_encode(['success' => false, 'message' => 'Missing required fields']);
+            exit();
+        }
+
+        $ok = ChartData::updateDataset($id, [
+            'dataset_label' => $dataset_label,
+            'color'         => $color,
+            'chart_type'    => $chart_type,
+        ]);
+        echo json_encode(['success' => $ok]);
+        exit();
+    }
+
+    /**
+     * POST params: report_code, action ('verify' | 'fake')
+     */
+    public function verifyEmergency() {
+        header('Content-Type: application/json');
+
+        // Must be logged-in admin
+        if (!isset($_SESSION['user_id']) || ($_SESSION['role'] ?? '') !== 'admin') {
+            echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+            exit();
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+            exit();
+        }
+
+        $report_code = trim($_POST['report_code'] ?? '');
+        $action      = trim($_POST['action'] ?? '');   // 'verify' or 'fake'
+
+        if (!$report_code || !in_array($action, ['verify', 'fake'])) {
+            echo json_encode(['success' => false, 'message' => 'Invalid input']);
+            exit();
+        }
+
+        $new_status = ($action === 'verify') ? 'pending' : 'fake';
+
+        try {
+            $pdo  = db();
+            $stmt = $pdo->prepare(
+                "UPDATE emergency_reports SET status = ?, updated_at = NOW() WHERE report_code = ?"
+            );
+            $stmt->execute([$new_status, $report_code]);
+            echo json_encode(['success' => true, 'status' => $new_status]);
+        } catch (Exception $e) {
+            error_log("Verify emergency error: " . $e->getMessage());
+            echo json_encode(['success' => false, 'message' => 'Database error']);
+        }
+        exit();
+    }
+}
