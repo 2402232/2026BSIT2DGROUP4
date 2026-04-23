@@ -291,4 +291,12 @@ class AdminController  {
         }
         exit();
     }
+
+    /**
+     * Download reports as PDF using FPDF
+     */
+    public function downloadReportsPdf() {
+        require_once ROOT_PATH . 'services/ReportPdfService.php';
+        ReportPdfService::outputDownload();
+    }
 }

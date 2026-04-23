@@ -159,6 +159,11 @@ switch ($action) {
         (new AdminController())->adminReports();
         break;
 
+    case 'download-reports-pdf':
+        require_once CONTROLLER_PATH . 'AdminController.php';
+        (new AdminController())->downloadReportsPdf();
+        break;
+
     case 'admin-settings':
         require_once CONTROLLER_PATH . 'AdminController.php';
         (new AdminController())->adminSettings();

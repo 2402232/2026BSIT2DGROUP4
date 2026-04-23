@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="top-bar-actions">
-            <button class="action-btn" onclick="window.print()"><i class="ri-printer-line"></i> Print</button>
+            <a class="action-btn" href="<?php echo BASE_URL; ?>index.php?action=download-reports-pdf"><i class="ri-download-2-line"></i> Download PDF</a>
             <button class="action-btn secondary"><i class="ri-download-2-line"></i> Export CSV</button>
         </div>
     </div>
